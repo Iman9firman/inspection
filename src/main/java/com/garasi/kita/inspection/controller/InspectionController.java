@@ -101,6 +101,30 @@ public class InspectionController {
         return "index";
     }
 
+    @GetMapping("/inspectionList")
+    public String inspectionList(Model model) {
+        List<Inspection> inspections = new ArrayList<>();
+        model.addAttribute("appName", appName);
+
+        int number = 1;
+        for (Inspection inspection : inpectionService.getData()) {
+            inspection.setId(number);
+            inspections.add(inspection);
+            number++;
+        }
+
+        model.addAttribute("inspection", inspections);
+        return "inspection_list";
+    }
+
+    @GetMapping("/detailInspection")
+    //@GetMapping("/detailInspection")
+    public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {
+        model.addAttribute("appName", appName);
+        System.out.println(kode);
+        return "detail_inspection";
+    }
+
     @PostMapping("/inputCustomer")
     public String greetingSubmit(Model model, @ModelAttribute Inspection inspection) {
         String pattern = "yyyyMMddHHmmss";

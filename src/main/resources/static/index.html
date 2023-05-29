@@ -109,7 +109,7 @@
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    <a href="tables.html" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    <a href="/inspectionList" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-add fa-sm text-white-50"></i>Inspection</a>
                 </div>
 
@@ -401,6 +401,16 @@
                                placeholder="input nopol" required>
                     </div>
                     <div class="form-group">
+                        <label for="merk">Merk</label>
+                        <input type="text" class="form-control" id="merk" th:field="*{merk}"
+                               placeholder="input merk mobil" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model</label>
+                        <input type="text" class="form-control" id="model" th:field="*{model}"
+                               placeholder="input model mobil" required>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label" for="phone">Nomor Handphone</label>
                         <input name="telphone" placeholder="0888 888 8888"
                                maxlength="15" id="phone" class="form-control" th:field="*{phoneNumber}" required/>
@@ -473,22 +483,6 @@
           var modal = $(this)
           modal.find('#typeInspection').val(recipient)
         })
-
-    var progress = [[${task}]];
-    var progressBar = document.getElementById('progress-bar');
-    progressBar.style.width = progress + '%';
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 

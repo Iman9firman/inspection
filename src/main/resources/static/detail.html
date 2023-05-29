@@ -23,6 +23,35 @@
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+    <style>
+       .container_img
+    {
+    height: 80%;
+    width: 80%;
+    object-fit: cover;
+    }
+        table
+    {
+    table-layout: fixed;
+    width: 100px;
+    }
+
+     .container_img_field
+    {
+    height: 50%;
+    width: 50%;
+    object-fit: cover;
+    }
+
+    .container_img_large
+    {
+    height: 30%;
+    width: 30%;
+    object-fit: cover;
+    }
+
+    </style>
+
 </head>
 
 <body id="page-top">
@@ -38,55 +67,22 @@
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Inspection List</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detail</li>
+                    </ol>
+                </nav>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
-                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                    <li class="nav-item dropdown no-arrow d-sm-none">
-                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-search fa-fw"></i>
-                        </a>
-                        <!-- Dropdown - Messages -->
-                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                             aria-labelledby="searchDropdown">
-                            <form class="form-inline mr-auto w-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small"
-                                           placeholder="Search for..." aria-label="Search"
-                                           aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-
-                    <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin1</span>
-                            <img class="img-profile rounded-circle"
-                                 src="img/undraw_profile.svg">
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </li>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <a onclick="window.print();"
+                           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-add fa-sm text-white-50"></i>Print</a>
+                    </div>
 
                 </ul>
 
@@ -98,204 +94,303 @@
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
                       integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"/>
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Detail</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-add fa-sm text-white-50"></i>Cetak</a>
+                    <h1 class="h3 mb-0 text-gray-800"></h1>
                 </div>
 
-                <div class="container">
-                    <!--                  start  kopsurat-->
-                    <div class="row">
-                        <div class="col-sm-8 bg-secondary text-white">
-                            <div class="col">
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col bg-danger">
-                                            <h3>Kode Booking Inspeksi</h3>
-                                        </div>
-                                        <div class="col">
-                                            BJASDASD1238-12391
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col">
-                                            GRADE
-                                        </div>
-                                        <div class="col">
-                                            A
-                                        </div>
-                                        <div class="col">
-                                            <div class="col">
-                                                A : Sangat Baik
-                                            </div>
-                                            <div class="col">
-                                                B : Baik
-                                            </div>
-                                            <div class="col">
-                                                C : Cukup
-                                            </div>
-                                            <div class="col">
-                                                D : Kurang
-                                            </div>
-                                            <div class="col">
-                                                E : Buruk
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 bg-danger text-white">
-                            2 of 2
-                        </div>
-                    </div>
-
-                    <!--                  end  kopsurat-->
-                    <div class="team-single">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-5 xs-margin-30px-bottom">
-                                <!--  <div class="team-single-img">
-                                      <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">
-                                  </div>-->
-                            </div>
-
-                            <div class="col-lg-8 col-md-7">
-                                <div class="team-single-text padding-50px-left sm-no-padding-left">
-                                    <div class="contact-info-section margin-40px-tb">
-                                        <ul class="list-style9 no-margin">
-
-                                            <h4 class="font-size38 sm-font-size32 xs-font-size30">Kode Booking Inspeksi:
-                                                B1274WYL-130423</h4>
-
-                                            <li>
-                                                <div class="row">
-                                                    <div class="col-md-5 col-5">
-                                                        <!--                                                        <i class="fas fa-graduation-cap text-orange"></i>-->
-                                                        <strong class="margin-10px-left text-orange">Ban kiri depan
-                                                            :</strong>
-                                                    </div>
-                                                    <div class="col-md-7 col-7">
-                                                        <p>60 % </p>
-                                                    </div>
-                                                </div>
-
-                                            </li>
-                                            <li>
-
-                                                <div class="row">
-                                                    <div class="col-md-5 col-5">
-                                                        <!--                                                        <i class="far fa-gem text-yellow"></i>-->
-                                                        <strong class="margin-10px-left text-yellow">Ban kanan depan
-                                                            :</strong>
-                                                    </div>
-                                                    <div class="col-md-7 col-7">
-                                                        <p>60%</p>
-                                                    </div>
-                                                </div>
-
-                                            </li>
-                                            <li>
-
-                                                <div class="row">
-                                                    <div class="col-md-5 col-5">
-                                                        <!--                                                        <i class="far fa-file text-lightred"></i>-->
-                                                        <strong class="margin-10px-left text-lightred">Diagonis OBD
-                                                            Scanner:</strong>
-                                                    </div>
-                                                    <div class="col-md-7 col-7">
-                                                        <p>Oke</p>
-                                                    </div>
-                                                </div>
-
-                                            </li>
-                                            <li>
-
-                                                <div class="row">
-                                                    <div class="col-md-5 col-5">
-                                                        <!--                                                        <i class="fas fa-map-marker-alt text-green"></i>-->
-                                                        <strong class="margin-10px-left text-green">Panel
-                                                            Indikator:</strong>
-                                                    </div>
-                                                    <div class="col-md-7 col-7">
-                                                        <p>Oke</p>
-                                                    </div>
-                                                </div>
-
-                                            </li>
-                                            <li>
-
-                                                <div class="row">
-                                                    <div class="col-md-5 col-5">
-                                                        <!--                                                        <i class="fas fa-mobile-alt text-purple"></i>-->
-                                                        <strong class="margin-10px-left xs-margin-four-left text-purple">Rem
-                                                            kaki:</strong>
-                                                    </div>
-                                                    <div class="col-md-7 col-7">
-                                                        <p>Oke</p>
-                                                    </div>
-                                                </div>
-
-                                            </li>
-                                            <li>
-                                                <div class="row">
-                                                    <div class="col-md-5 col-5">
-                                                        <!--<i class="fas fa-envelope text-pink"></i>-->
-                                                        <strong class="margin-10px-left xs-margin-four-left text-pink">Jok
-                                                            Belakang:</strong>
-                                                    </div>
-                                                    <div class="col-md-7 col-7">
-                                                        <p><a href="javascript:void(0)">Oke</a></p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <p class="no-margin-bottom">Catatan :
-                                        *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita. Dengan
-                                        menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
-                                        setuju dengan Syarat dan Ketentuan yang berlaku.
-                                        *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
-                                        inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap.
-                                        Dan sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka
-                                        apabila ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal
-                                        inspeksi, maka hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-
-                            </div>
-                        </div>
-                    </div>
+                <div class="table">
+                    <table class="table" border="2">
+                        <!--                    kop surat start-->
+                        <tr>
+                            <td colspan="2" bgcolor="red" align="center" style="vertical-align: middle;"><h4
+                                    style="color: azure">KODE
+                                BOOKING INSPEKSI : </h4></td>
+                            <td align="center" style="vertical-align: middle;"><h5><b>B19238132ZK123913</b></h5></td>
+                            <td rowspan="2" align="center" style="vertical-align: middle;"><img
+                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                    class="container_img"/></td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align: middle;"><h3>GRADE</h3></td>
+                            <td align="center" style="vertical-align: middle;"><h1> A </h1></td>
+                            <td> A : Sangat Baik <br>B : Baik<br>C : CUKUP<br>D : KURANG<br>E : BURUK</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" bgcolor="yellow"></td>
+                        </tr>
+                    </table>
                 </div>
+                <!--                    kop surat end-->
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        data-whatever="@mdo">Open modal for @mdo
-                </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        data-whatever="@fat">Open modal for @fat
-                </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        data-whatever="@getbootstrap">Open modal for @getbootstrap
-                </button>
+
+                <div class="field">
+                    <table class="table" border="2">
+
+                        <tr>
+                            <td colspan="1" style="vertical-align: middle;">ESTIMASI PERAWATAN</td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">Catatan :
+                                *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita.</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="1" style="vertical-align: middle;">ESTIMASI PERBAIKAN</td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">Catatan :
+                                *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita. Dengan
+                                menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
+                                setuju dengan Syarat dan Ketentuan yang berlaku.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="1" style="vertical-align: middle;">KESIMPULAN</td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom"> maka
+                                apabila ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal
+                                inspeksi, maka hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" align="center" bgcolor="red"><b style="color: azure">Inspection
+                                    Report</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+
+                            <tr class="table-success">
+                                <td style="vertical-align: middle;"><b>Nama Customer</b></td>
+                                <td style="vertical-align: middle;"><b>: Emir Reza</b></td>
+                                <td style="vertical-align: middle;"><b>Inspektor</b></td>
+                                <td style="vertical-align: middle;"><b>: Aldo</b></td>
+                            </tr>
+                            <tr class="table-success">
+                                <td style="vertical-align: middle;"><b>Lokasi Inspeksi</b></td>
+                                <td style="vertical-align: middle;"><b>: Green lake, Eas Asia 1</b></td>
+                                <td style="vertical-align: middle;"><b>Jam</b></td>
+                                <td style="vertical-align: middle;"><b>: 9:00</b></td>
+                            </tr>
+                            <tr class="table-success">
+                                <td style="vertical-align: middle;"><b>No Handphone</b></td>
+                                <td style="vertical-align: middle;"><b>: 087885258236</b></td>
+                                <td style="vertical-align: middle;"><b>Tanggal</b></td>
+                                <td style="vertical-align: middle;"><b>: 13-Apr-2023</b></td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" bgcolor="yellow"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center" class="table-info"><b style="color: black">Data
+                                    Kendaraan</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td><b>No. Polisi </b></td>
+                                <td colspan="2"><p>: B1274WY asdasdasd asdna sdja sdja sdja dsja sd asd ajds aj ds</p>
+                                </td>
+                            </tr>
+
+                            <tr class="table-secondary">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">: maka
+                                    apabila ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal
+                                    inspeksi, maka hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" bgcolor="yellow"></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="4" align="center" class="table-info"><b style="color: black">INTERIOR JOK &
+                                    TRIM</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Jok Depan</b></td>
+                                <td colspan="2"><p>: keadaan masih bagus</p>
+                                </td>
+                                <td rowspan="1">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_field"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_field"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_field"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_field"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_field"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_field"/>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">: maka
+                                    apabila ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal
+                                    inspeksi, maka hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" bgcolor="yellow"></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="4" align="center" class="table-info"><b style="color: black">FOTO
+                                    KENDARAAN</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Exterior</b></td>
+                                <td colspan="3">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Interior</b></td>
+                                <td colspan="3">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+
+
+                                    </table>
+                            <tr>
+                                <td colspan="4" style="vertical-align: middle;"><p class="no-margin-bottom">
+                                    Catatan : *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita.
+                                    Dengan
+                                    menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan setuju
+                                    dengan Syarat dan Ketentuan yang berlaku.
+                                    *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
+                                    inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap. Dan
+                                    sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka apabila
+                                    ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal inspeksi, maka
+                                    hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                                </td>
+                            </tr>
+                            </td>
+                            </tr>
+                        </table>
+                    </table>
+                </div>
             </div>
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
-
     </div>
-    <!-- End of Content Wrapper -->
+</div>
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; GKI 2023</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
@@ -342,6 +437,17 @@
 
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
+
+<script type="text/javascript">
+
+    @media print {
+  button {
+    display :none;
+  }
+
+}
+
+</script>
 
 
 </body>

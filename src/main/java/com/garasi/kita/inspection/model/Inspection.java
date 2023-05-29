@@ -17,6 +17,8 @@ public class Inspection {
 
     String kodeBooking;
     String nomorPolisi;
+    String merk;
+    String model;
     String paket;
     String price;
     String customer;
