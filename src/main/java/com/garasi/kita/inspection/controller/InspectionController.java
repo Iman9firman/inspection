@@ -120,8 +120,35 @@ public class InspectionController {
     @GetMapping("/detailInspection")
     //@GetMapping("/detailInspection")
     public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {
+        HashMap<Integer, String> noteInspection = new HashMap<>();
+        String[] label = {"Inspection", "Data Kendaraan", "DOKUMEN", "FITUR", "Data7", "Data8", "Data9", "Data10", "Data11", "Data12", "Data13", "Data14"};
         model.addAttribute("appName", appName);
-        System.out.println(kode);
+
+        Inspection inspection = inpectionService.getData().get(0);
+        HashMap<Integer, List<InspectionDetail>> stringListHashMap = new HashMap<>();
+        List<InspectionDetail> inspectionDetailList = new ArrayList<>();
+        Integer keyCurrent = 0;
+        for (InspectionDetail inspectionDetail : inpectionDetailService.getData()) {
+            if (keyCurrent != Integer.parseInt(inspectionDetail.getIdField().substring(0, 1))) {
+                inspectionDetailList = new ArrayList<>();
+                keyCurrent = Integer.parseInt(inspectionDetail.getIdField().substring(0, 1));
+            }
+
+            if (Integer.parseInt(inspectionDetail.getIdField().substring(5, 6)) == 0) {
+                noteInspection.put(keyCurrent, inspectionDetail.getValue());
+            } else {
+                inspectionDetailList.add(inspectionDetail);
+            }
+
+            stringListHashMap.put(Integer.parseInt(inspectionDetail.getIdField().substring(0, 1)), inspectionDetailList);
+
+        }
+
+        model.addAttribute("titleQuestion", label);
+        model.addAttribute("inspection", inspection);
+        model.addAttribute("inspectionNote", noteInspection);
+        model.addAttribute("inspectionDetail", stringListHashMap);
+
         return "detail_inspection";
     }
 

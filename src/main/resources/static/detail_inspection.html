@@ -1,29 +1,71 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
+
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>GKI CMS</title>
+    <title>SB Admin 2 - Tables</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-    <style>
-    .center {
-  padding: 5% 0;
-  text-align: center;
-}
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-    </style>
+    <style>
+       .container_img
+    {
+    height: 80%;
+    width: 80%;
+    object-fit: cover;
+    }
+        table
+    {
+    table-layout: fixed;
+    width: 100px;
+    }
+
+     .container_img_field
+    {
+    height: 50%;
+    width: 50%;
+    object-fit: cover;
+    }
+
+    .container_img_large
+    {
+    height: 30%;
+    width: 30%;
+    object-fit: cover;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </style>
 
 </head>
@@ -41,55 +83,22 @@
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Inspection List</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detail</li>
+                    </ol>
+                </nav>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
-                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                    <li class="nav-item dropdown no-arrow d-sm-none">
-                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-search fa-fw"></i>
-                        </a>
-                        <!-- Dropdown - Messages -->
-                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                             aria-labelledby="searchDropdown">
-                            <form class="form-inline mr-auto w-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small"
-                                           placeholder="Search for..." aria-label="Search"
-                                           aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-
-                    <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin1</span>
-                            <img class="img-profile rounded-circle"
-                                 src="img/undraw_profile.svg">
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </li>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <a onclick="window.print();"
+                           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-add fa-sm text-white-50"></i>Print</a>
+                    </div>
 
                 </ul>
 
@@ -98,128 +107,325 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-8 bg-secondary text-white">
-                        <div class="col">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col bg-danger">
-                                        <h1>Kode Booking Inspeksi : </h1>
-                                    </div>
-                                    <div class="col">
-                                        BJASDASD1238-12391
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        GRADE
-                                    </div>
-                                    <div class="col center">
-                                        <h1>A</h1>
-                                    </div>
-                                    <div class="col">
-                                        <div class="col">
-                                            A : Sangat Baik
-                                        </div>
-                                        <div class="col">
-                                            B : Baik
-                                        </div>
-                                        <div class="col">
-                                            C : Cukup
-                                        </div>
-                                        <div class="col">
-                                            D : Kurang
-                                        </div>
-                                        <div class="col">
-                                            E : Buruk
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 bg-danger text-white">
-                        2 of 2
-                    </div>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+                      integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"/>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800"></h1>
                 </div>
-                <!-- /.container-fluid -->
 
+                <div class="table">
+                    <table class="table" border="2">
+                        <!--                    kop surat start-->
+                        <tr>
+                            <td colspan="2" bgcolor="red" align="center" style="vertical-align: middle;"><h4
+                                    style="color: azure">KODE
+                                BOOKING INSPEKSI : </h4></td>
+                            <td align="center" style="vertical-align: middle;"><h5><b>[[${inspection.kodeBooking}]]</b>
+                            </h5></td>
+                            <td rowspan="2" align="center" style="vertical-align: middle;"><img
+                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                    class="container_img"/></td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align: middle;"><h3>GRADE</h3></td>
+                            <td align="center" style="vertical-align: middle;"><h1> A </h1></td>
+                            <td> A : Sangat Baik <br>B : Baik<br>C : CUKUP<br>D : KURANG<br>E : BURUK</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" bgcolor="yellow"></td>
+                        </tr>
+                    </table>
+                </div>
+                <!--                    kop surat end-->
+
+
+                <div class="field">
+                    <table class="table" border="2">
+
+                        <tr>
+                            <td colspan="1" style="vertical-align: middle;">ESTIMASI PERAWATAN</td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">Catatan :
+                                *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita.</p></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="1" style="vertical-align: middle;">ESTIMASI PERBAIKAN</td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">Catatan :
+                                *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita. Dengan
+                                menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
+                                setuju dengan Syarat dan Ketentuan yang berlaku.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="1" style="vertical-align: middle;">KESIMPULAN</td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom"> maka
+                                apabila ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal
+                                inspeksi, maka hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" align="center" bgcolor="red"><b style="color: azure">Inspection
+                                    Report</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+
+                            <tr class="table-success">
+                                <td style="vertical-align: middle;"><b>Nama Customer</b></td>
+                                <td style="vertical-align: middle;"><b>: Emir Reza</b></td>
+                                <td style="vertical-align: middle;"><b>Inspektor</b></td>
+                                <td style="vertical-align: middle;"><b>: Aldo</b></td>
+                            </tr>
+                            <tr class="table-success">
+                                <td style="vertical-align: middle;"><b>Lokasi Inspeksi</b></td>
+                                <td style="vertical-align: middle;"><b>: Green lake, Eas Asia 1</b></td>
+                                <td style="vertical-align: middle;"><b>Jam</b></td>
+                                <td style="vertical-align: middle;"><b>: 9:00</b></td>
+                            </tr>
+                            <tr class="table-success">
+                                <td style="vertical-align: middle;"><b>No Handphone</b></td>
+                                <td style="vertical-align: middle;"><b>: 087885258236</b></td>
+                                <td style="vertical-align: middle;"><b>Tanggal</b></td>
+                                <td style="vertical-align: middle;"><b>: 13-Apr-2023</b></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm" th:each="result : ${inspectionDetail}">
+                            <tr>
+                                <td colspan="4" bgcolor="yellow"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center" class="table-info"><b style="color: black">[[${titleQuestion[result.key]}]]</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr th:each="item, i : ${result.value}">
+                                <td><b>[[${item.label}]] </b></td>
+                                <td colspan="2"><p>: [[${item.value}]] </p></td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                    [[${inspectionNote.get(result.key)}]]</p>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" bgcolor="yellow"></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="4" align="center" class="table-info"><b style="color: black">FOTO
+                                    KENDARAAN</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Exterior</b></td>
+                                <td colspan="3">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Interior</b></td>
+                                <td colspan="3">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+                                        <tr>
+                                            <img
+                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                    class="container_img_large"/>
+                                        </tr>
+                                        <tr><img
+                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                                class="container_img_large"/>
+                                        </tr>
+
+
+                                    </table>
+                            <tr>
+                                <td colspan="4" style="vertical-align: middle;"><p class="no-margin-bottom">
+                                    Catatan : *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi
+                                    Kita.
+                                    Dengan
+                                    menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
+                                    setuju
+                                    dengan Syarat dan Ketentuan yang berlaku.
+                                    *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
+                                    inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap.
+                                    Dan
+                                    sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka apabila
+                                    ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal inspeksi,
+                                    maka
+                                    hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                                </td>
+                            </tr>
+                            </td>
+                            </tr>
+                        </table>
+                    </table>
+                </div>
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; GKI 2023</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
+</div>
+</div>
+<!-- End of Main Content -->
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; GKI 2023</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
             </div>
         </div>
     </div>
+</div>
+-->
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+
+<script type="text/javascript">
+
+    @media print {
+  button {
+    display :none;
+  }
+
+}
 
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-
-    <script type="text/javascript">
-        $('#exampleModal').on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget) // Button that triggered the modal
-          var recipient = button.data('whatever') // Extract info from data-* attributes
-          var modal = $(this)
-          modal.find('#typeInspection').val(recipient)
-        })
 
 
 
 
-    </script>
+
+
+
+
+
+
+
+
+
+
+
+</script>
 
 
 </body>

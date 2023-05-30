@@ -19,5 +19,4 @@ public class InspectionDetail {
     String idField;
     String label;
     String value;
-    String photo;
 }
