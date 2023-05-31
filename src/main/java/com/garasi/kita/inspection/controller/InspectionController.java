@@ -125,8 +125,8 @@ public class InspectionController {
         model.addAttribute("appName", appName);
 
         Inspection inspection = inpectionService.getData().get(0);
-        HashMap<Integer, List<InspectionDetail>> stringListHashMap = new HashMap<>();
-        List<InspectionDetail> inspectionDetailList = new ArrayList<>();
+        HashMap<Integer, List<InspectionDetailPhoto>> stringListHashMap = new HashMap<>();
+        List<InspectionDetailPhoto> inspectionDetailList = new ArrayList<>();
         Integer keyCurrent = 0;
         for (InspectionDetail inspectionDetail : inpectionDetailService.getData()) {
             if (keyCurrent != Integer.parseInt(inspectionDetail.getIdField().substring(0, 1))) {
@@ -137,12 +137,39 @@ public class InspectionController {
             if (Integer.parseInt(inspectionDetail.getIdField().substring(5, 6)) == 0) {
                 noteInspection.put(keyCurrent, inspectionDetail.getValue());
             } else {
-                inspectionDetailList.add(inspectionDetail);
+                InspectionDetailPhoto inspectionDetailPhoto = new InspectionDetailPhoto();
+                inspectionDetailPhoto.setId(inspectionDetail.getId());
+                inspectionDetailPhoto.setKodeBooking(inspectionDetail.getKodeBooking());
+                inspectionDetailPhoto.setIdField(inspectionDetail.getIdField());
+                inspectionDetailPhoto.setLabel(inspectionDetail.getLabel());
+                inspectionDetailPhoto.setValue(inspectionDetail.getValue());
+                if (Integer.parseInt(inspectionDetail.getIdField().substring(0, 1)) == 2) {
+                    ArrayList<String> photo = new ArrayList<>();
+                    photo.add("https://1.bp.blogspot.com/-zH4J9gq-zHE/W2HhUs1hq8I/AAAAAAAADNE/0_XZzXNPIMsz5_9tNGoTPeSEz9mpizPxgCEwYBhgL/s1600/130625-F-BH566-591.jpeg");
+                    photo.add("https://i.ytimg.com/vi/5mQEuso00d4/maxresdefault.jpg");
+                    inspectionDetailPhoto.setPhoto(photo);
+
+                }
+
+                inspectionDetailList.add(inspectionDetailPhoto);
             }
 
             stringListHashMap.put(Integer.parseInt(inspectionDetail.getIdField().substring(0, 1)), inspectionDetailList);
 
         }
+
+        model.addAttribute("estimasiPerbaikan", "harga perbaikan sama dengan");
+        model.addAttribute("estimasiPerawatan", "harga perawatan sama dengan");
+        model.addAttribute("kesimpulan", "jadi kesimpulannya adalah");
+        model.addAttribute("grade", "A");
+
+        //dummy
+        ArrayList<String> photo = new ArrayList<>();
+        photo.add("https://1.bp.blogspot.com/-zH4J9gq-zHE/W2HhUs1hq8I/AAAAAAAADNE/0_XZzXNPIMsz5_9tNGoTPeSEz9mpizPxgCEwYBhgL/s1600/130625-F-BH566-591.jpeg");
+        photo.add("https://i.ytimg.com/vi/5mQEuso00d4/maxresdefault.jpg");
+
+        model.addAttribute("interiorPhoto", photo);
+        model.addAttribute("exteriorPhoto", photo);
 
         model.addAttribute("titleQuestion", label);
         model.addAttribute("inspection", inspection);

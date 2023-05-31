@@ -114,9 +114,7 @@
                                               class="badge badge-pill badge-success">Done</span>
                                     </td>
                                     <td>
-                                        <!--   <a th:href="@{${'/detailInspection/'+result.kodeBooking}}"
-                                              class="btn btn-outline-success">Detail</a>-->
-                                        <a href="/detailInspection?kode_booking=123123"
+                                        <a  th:if="${result.status == 2}" th:href="@{${'/detailInspection?kode_booking='+result.kodeBooking}}"
                                            class="btn btn-outline-success">Detail</a>
                                     </td>
                                 </tr>

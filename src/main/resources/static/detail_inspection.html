@@ -51,21 +51,6 @@
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </style>
 
 </head>
@@ -128,7 +113,7 @@
                         </tr>
                         <tr>
                             <td align="center" style="vertical-align: middle;"><h3>GRADE</h3></td>
-                            <td align="center" style="vertical-align: middle;"><h1> A </h1></td>
+                            <td align="center" style="vertical-align: middle;"><h1> [[${grade}]] </h1></td>
                             <td> A : Sangat Baik <br>B : Baik<br>C : CUKUP<br>D : KURANG<br>E : BURUK</td>
                         </tr>
                         <tr>
@@ -139,16 +124,14 @@
                         </tr>
                     </table>
                 </div>
-                <!--                    kop surat end-->
-
 
                 <div class="field">
                     <table class="table" border="2">
 
                         <tr>
                             <td colspan="1" style="vertical-align: middle;">ESTIMASI PERAWATAN</td>
-                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">Catatan :
-                                *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita.</p></td>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">
+                                [[${estimasiPerawatan}]].</p></td>
                         </tr>
                         <tr>
                             <td colspan="4"></td>
@@ -156,10 +139,8 @@
 
                         <tr>
                             <td colspan="1" style="vertical-align: middle;">ESTIMASI PERBAIKAN</td>
-                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">Catatan :
-                                *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi Kita. Dengan
-                                menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
-                                setuju dengan Syarat dan Ketentuan yang berlaku.</p>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">
+                                [[${estimasiPerbaikan}]].</p>
                             </td>
                         </tr>
                         <tr>
@@ -168,9 +149,8 @@
 
                         <tr>
                             <td colspan="1" style="vertical-align: middle;">KESIMPULAN</td>
-                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom"> maka
-                                apabila ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal
-                                inspeksi, maka hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">
+                                [[${kesimpulan}]].</p>
                             </td>
                         </tr>
                         <tr>
@@ -188,21 +168,21 @@
 
                             <tr class="table-success">
                                 <td style="vertical-align: middle;"><b>Nama Customer</b></td>
-                                <td style="vertical-align: middle;"><b>: Emir Reza</b></td>
+                                <td style="vertical-align: middle;"><b>: [[${inspection.customer}]]</b></td>
                                 <td style="vertical-align: middle;"><b>Inspektor</b></td>
-                                <td style="vertical-align: middle;"><b>: Aldo</b></td>
+                                <td style="vertical-align: middle;"><b>: [[${inspection.inspektor}]]</b></td>
                             </tr>
                             <tr class="table-success">
                                 <td style="vertical-align: middle;"><b>Lokasi Inspeksi</b></td>
-                                <td style="vertical-align: middle;"><b>: Green lake, Eas Asia 1</b></td>
-                                <td style="vertical-align: middle;"><b>Jam</b></td>
-                                <td style="vertical-align: middle;"><b>: 9:00</b></td>
+                                <td style="vertical-align: middle;"><b>: [[${inspection.lokasi}]]</b></td>
+                                <td style="vertical-align: middle;"><b>Tanggal Inspeksi</b></td>
+                                <td style="vertical-align: middle;"><b>: [[${inspection.tanggal}]]</b></td>
                             </tr>
                             <tr class="table-success">
                                 <td style="vertical-align: middle;"><b>No Handphone</b></td>
-                                <td style="vertical-align: middle;"><b>: 087885258236</b></td>
-                                <td style="vertical-align: middle;"><b>Tanggal</b></td>
-                                <td style="vertical-align: middle;"><b>: 13-Apr-2023</b></td>
+                                <td style="vertical-align: middle;"><b>: [[${inspection.phoneNumber}]]</b></td>
+                                <td style="vertical-align: middle;"><b>Requester</b></td>
+                                <td style="vertical-align: middle;"><b>: [[${inspection.createAt}]]</b></td>
                             </tr>
                         </table>
 
@@ -220,6 +200,14 @@
                             <tr th:each="item, i : ${result.value}">
                                 <td><b>[[${item.label}]] </b></td>
                                 <td colspan="2"><p>: [[${item.value}]] </p></td>
+                                <td rowspan="1">
+                                    <table class="table table-sm">
+                                        <tr th:each="photos : ${item.photo}">
+                                            <img class="container_img_field" th:src="${photos}"/>
+                                        </tr>
+                                    </table>
+                                </td>
+
                             </tr>
                             <tr class="table-secondary">
                                 <td><b>Catatan </b></td>
@@ -246,32 +234,8 @@
                                 <td><b>Exterior</b></td>
                                 <td colspan="3">
                                     <table class="table table-sm">
-                                        <tr>
-                                            <img
-                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                    class="container_img_large"/>
-                                        </tr>
-                                        <tr><img
-                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                class="container_img_large"/>
-                                        </tr>
-                                        <tr>
-                                            <img
-                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                    class="container_img_large"/>
-                                        </tr>
-                                        <tr><img
-                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                class="container_img_large"/>
-                                        </tr>
-                                        <tr>
-                                            <img
-                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                    class="container_img_large"/>
-                                        </tr>
-                                        <tr><img
-                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                class="container_img_large"/>
+                                        <tr th:each="photos : ${exteriorPhoto}">
+                                            <img class="container_img_large" th:src="${photos}"/>
                                         </tr>
 
                                     </table>
@@ -282,34 +246,9 @@
                                 <td><b>Interior</b></td>
                                 <td colspan="3">
                                     <table class="table table-sm">
-                                        <tr>
-                                            <img
-                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                    class="container_img_large"/>
+                                        <tr th:each="photos : ${interiorPhoto}">
+                                            <img class="container_img_large" th:src="${photos}"/>
                                         </tr>
-                                        <tr><img
-                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                class="container_img_large"/>
-                                        </tr>
-                                        <tr>
-                                            <img
-                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                    class="container_img_large"/>
-                                        </tr>
-                                        <tr><img
-                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                class="container_img_large"/>
-                                        </tr>
-                                        <tr>
-                                            <img
-                                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                    class="container_img_large"/>
-                                        </tr>
-                                        <tr><img
-                                                src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                                class="container_img_large"/>
-                                        </tr>
-
 
                                     </table>
                             <tr>
@@ -408,6 +347,9 @@
   }
 
 }
+
+
+
 
 
 
