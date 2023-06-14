@@ -25,4 +25,5 @@ public class InpectionDetailService {
         return inspectionDetailRepository.save(inspection);
     }
 
+
 }

@@ -1,5 +1,6 @@
 package com.garasi.kita.inspection.controller;
 
+import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.*;
 import com.garasi.kita.inspection.repositories.InspectionRepository;
 import com.garasi.kita.inspection.service.InpectionDetailService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -49,6 +51,9 @@ public class InspectionController {
 
     @Value("${path.file.url}")
     private String pathUrl;
+
+    @Autowired
+    private RepoDao dao;
 
 
     @GetMapping("/")
@@ -118,17 +123,16 @@ public class InspectionController {
     }
 
     @GetMapping("/detailInspection")
-    //@GetMapping("/detailInspection")
     public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {
         HashMap<Integer, String> noteInspection = new HashMap<>();
         String[] label = {"Inspection", "Data Kendaraan", "DOKUMEN", "FITUR", "Data7", "Data8", "Data9", "Data10", "Data11", "Data12", "Data13", "Data14"};
         model.addAttribute("appName", appName);
 
-        Inspection inspection = inpectionService.getData().get(0);
+        Inspection inspection = dao.getDataInspection(kode);
         HashMap<Integer, List<InspectionDetailPhoto>> stringListHashMap = new HashMap<>();
         List<InspectionDetailPhoto> inspectionDetailList = new ArrayList<>();
         Integer keyCurrent = 0;
-        for (InspectionDetail inspectionDetail : inpectionDetailService.getData()) {
+        for (InspectionDetail inspectionDetail : dao.getDatainpectionDetailService(kode)) {
             if (keyCurrent != Integer.parseInt(inspectionDetail.getIdField().substring(0, 1))) {
                 inspectionDetailList = new ArrayList<>();
                 keyCurrent = Integer.parseInt(inspectionDetail.getIdField().substring(0, 1));
@@ -143,13 +147,8 @@ public class InspectionController {
                 inspectionDetailPhoto.setIdField(inspectionDetail.getIdField());
                 inspectionDetailPhoto.setLabel(inspectionDetail.getLabel());
                 inspectionDetailPhoto.setValue(inspectionDetail.getValue());
-                if (Integer.parseInt(inspectionDetail.getIdField().substring(0, 1)) == 2) {
-                    ArrayList<String> photo = new ArrayList<>();
-                    photo.add("https://1.bp.blogspot.com/-zH4J9gq-zHE/W2HhUs1hq8I/AAAAAAAADNE/0_XZzXNPIMsz5_9tNGoTPeSEz9mpizPxgCEwYBhgL/s1600/130625-F-BH566-591.jpeg");
-                    photo.add("https://i.ytimg.com/vi/5mQEuso00d4/maxresdefault.jpg");
-                    inspectionDetailPhoto.setPhoto(photo);
 
-                }
+                inspectionDetailPhoto.setPhoto(dao.getDataInspectionDetailPhoto(inspectionDetail.getKodeBooking(), inspectionDetail.getIdField()));
 
                 inspectionDetailList.add(inspectionDetailPhoto);
             }
@@ -175,7 +174,6 @@ public class InspectionController {
         model.addAttribute("inspection", inspection);
         model.addAttribute("inspectionNote", noteInspection);
         model.addAttribute("inspectionDetail", stringListHashMap);
-
         return "detail_inspection";
     }
 
@@ -201,68 +199,5 @@ public class InspectionController {
         return "redirect:/";
     }
 
-    @PostMapping("/android")
-    public String saveInspectionDetail(@RequestBody Map<String, List<InspectionDetail>> inspectionDetail,
-                                       HttpServletRequest request) {
-        for (InspectionDetail inspectionDetail1 : inspectionDetail.get("inspectionDetail")) {
-            inpectionDetailService.saveData(inspectionDetail1);
-        }
-        return "success";
-    }
-
-    @PostMapping("/delete")
-    public ResponseEntity<String> deleteFile(@RequestParam String name,
-                                             HttpServletRequest request) {
-        return ResponseEntity.ok().body("sukses");
-    }
-
-    @PostMapping("/android/photo/{kode_booking}/{id_field}")
-    public ResponseEntity<Object> uploadImage(@PathVariable("kode_booking") String
-                                                      kodeBooking, @PathVariable("id_field") String idField, @RequestParam String
-                                                      androidPath, @RequestParam("image") MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            String type = ".jpg";
-            try {
-                type = file.getOriginalFilename().split("\\.")[1];
-            } catch (Exception e) {
-            }
-
-            String name = new Date().getTime() + "_" + kodeBooking + "_" + idField + "." + type;
-
-            StringBuilder fileNames = new StringBuilder();
-            Path fileNameAndPath = Paths.get(pathName, name);
-            fileNames.append(file.getOriginalFilename());
-            Files.write(fileNameAndPath, file.getBytes());
-
-            PhotoItem photoItem = new PhotoItem();
-            photoItem.setIdField(idField);
-            photoItem.setKodeBooking(kodeBooking);
-            photoItem.setAndroidPath(androidPath);
-            photoItem.setPath(pathUrl + name);
-
-            photoItemService.saveData(photoItem);
-
-        } else {
-            return ResponseEntity.badRequest().body("file not found");
-        }
-        return ResponseEntity.accepted().body("success");
-    }
-
-    @GetMapping("/download")
-    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam String name) throws IOException {
-
-        File file = new File(pathName + "/" + name);
-        byte[] data = Files.readAllBytes(file.toPath());
-        ByteArrayResource resource = new ByteArrayResource(data);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getName());
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(data.length)
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
-    }
 
 }
