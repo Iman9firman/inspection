@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>GKI</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -34,6 +34,7 @@
     {
     table-layout: fixed;
     width: 100px;
+    border-bottom-style: hidden;
     }
 
      .container_img_field
@@ -49,6 +50,125 @@
     width: 30%;
     object-fit: cover;
     }
+
+  .container_page
+    {
+    height: 80%;
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+    }
+
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  padding: 0 6px;
+  float: left;
+  width: 24.99999%;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+    width: 49.99999%;
+    margin: 6px 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+ td {
+            border: 0;
+            padding: 10px;
+            border-bottom-style: hidden;
+        }
+         tr {
+            border: 0;
+            padding: 10px;
+            border-bottom-style: hidden;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     </style>
@@ -91,128 +211,331 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div class="container-fluid">
+            <div>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
                       integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"/>
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800"></h1>
                 </div>
 
-                <div class="table">
-                    <table class="table" border="2">
-                        <!--                    kop surat start-->
-                        <tr>
-                            <td colspan="2" bgcolor="red" align="center" style="vertical-align: middle;"><h4
-                                    style="color: azure">KODE
-                                BOOKING INSPEKSI : </h4></td>
-                            <td align="center" style="vertical-align: middle;"><h5><b>[[${inspection.kodeBooking}]]</b>
-                            </h5></td>
-                            <td rowspan="2" align="center" style="vertical-align: middle;"><img
-                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                    class="container_img"/></td>
-                        </tr>
-                        <tr>
-                            <td align="center" style="vertical-align: middle;"><h3>GRADE</h3></td>
-                            <td align="center" style="vertical-align: middle;"><h1> [[${grade}]] </h1></td>
-                            <td> A : Sangat Baik <br>B : Baik<br>C : CUKUP<br>D : KURANG<br>E : BURUK</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" bgcolor="yellow"></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="field">
-                    <table class="table" border="2">
-
-                        <tr>
-                            <td colspan="1" style="vertical-align: middle;">ESTIMASI PERAWATAN</td>
-                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">
-                                [[${estimasiPerawatan}]].</p></td>
-                        </tr>
-                        <tr>
-                            <td colspan="4"></td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="1" style="vertical-align: middle;">ESTIMASI PERBAIKAN</td>
-                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">
-                                [[${estimasiPerbaikan}]].</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4"></td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="1" style="vertical-align: middle;">KESIMPULAN</td>
-                            <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">
-                                [[${kesimpulan}]].</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4"></td>
-                        </tr>
-
-                        <table class="table table-sm">
+                <div class="container_page">
+                    <div class="table">
+                        <table class="table">
                             <tr>
-                                <td colspan="4" align="center" bgcolor="red"><b style="color: azure">Inspection
-                                    Report</b></td>
+                                <td rowspan="3" align="center" style="vertical-align: middle;"><img
+                                        src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                        class="container_img"/></td>
+                                <td rowspan="3">&nbsp;</td>
+                                <td>&nbsp;</td>
                             </tr>
                             <tr>
-                                <td colspan="4"></td>
+                                <td rowspan="2">&nbsp;</td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <b style="color: black">Tanggal Inspeksi : [[${inspection.tanggal}]]</b>
+                                </td>
 
-                            <tr class="table-success">
-                                <td style="vertical-align: middle;"><b>Nama Customer</b></td>
-                                <td style="vertical-align: middle;"><b>: [[${inspection.customer}]]</b></td>
-                                <td style="vertical-align: middle;"><b>Inspektor</b></td>
-                                <td style="vertical-align: middle;"><b>: [[${inspection.inspektor}]]</b></td>
                             </tr>
-                            <tr class="table-success">
-                                <td style="vertical-align: middle;"><b>Lokasi Inspeksi</b></td>
-                                <td style="vertical-align: middle;"><b>: [[${inspection.lokasi}]]</b></td>
-                                <td style="vertical-align: middle;"><b>Tanggal Inspeksi</b></td>
-                                <td style="vertical-align: middle;"><b>: [[${inspection.tanggal}]]</b></td>
-                            </tr>
-                            <tr class="table-success">
-                                <td style="vertical-align: middle;"><b>No Handphone</b></td>
-                                <td style="vertical-align: middle;"><b>: [[${inspection.phoneNumber}]]</b></td>
-                                <td style="vertical-align: middle;"><b>Requester</b></td>
-                                <td style="vertical-align: middle;"><b>: [[${inspection.createAt}]]</b></td>
+                            <tr>
+                                <td colspan="4" bgcolor="red"><h4 style="color: azure">KODE BOOKING INSPEKSI : <b>[[${inspection.kodeBooking}]]</b>
+                                </h4></td>
                             </tr>
                         </table>
+                    </div>
 
-                        <table class="table table-sm" th:each="result : ${inspectionDetail}">
-                            <tr>
-                                <td colspan="4" bgcolor="yellow"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" align="center" class="table-info"><b style="color: black">[[${titleQuestion[result.key]}]]</b>
+                    <div class="field">
+                        <table class="table table-sm">
+                            <tr class="table-secondary">
+                                <td><p style="color: black">Nomor Polisi</p></td>
+                                <td><p style="color: black"
+                                       th:text="${hashMap.get('200001') != null ?hashMap.get('200001').value: ':  -' }"></p>
+                                    <p></td>
+                                <td><p style="color: black">Warna Eksterior/Interior</p></td>
+                                <td><p style="color: black"
+                                       th:text="${hashMap.get('200008') != null ?hashMap.get('200008').value: ':  -' }"></p>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"></td>
-                            </tr>
-                            <tr th:each="item, i : ${result.value}">
-                                <td><b>[[${item.label}]] </b></td>
-                                <td colspan="2"><p>: [[${item.value}]] </p></td>
-                                <td rowspan="1">
-                                    <table class="table table-sm">
-                                        <tr th:each="photos : ${item.photo}">
-                                            <img class="container_img_field" th:src="${photos}"/>
-                                        </tr>
-                                    </table>
-                                </td>
-
                             </tr>
                             <tr class="table-secondary">
+                                <td style="vertical-align: middle;"><p style="color: black">Merk</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200002') != null ?hashMap.get('200002').value: ':  -' }"></p>
+
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Bahan Bakar</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200015') != null ?hashMap.get('200015').value: ':  -' }"></p>
+
+                                </td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td style="vertical-align: middle;"><p style="color: black">Model/Type</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200003') != null ?hashMap.get('200003').value: ':  -' }"></p>
+
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Odometer</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200009') != null ?hashMap.get('200009').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td style="vertical-align: middle;"><p style="color: black">Transmisi</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200004') != null ?hashMap.get('200004').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pajak Berlaku Sampai</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200010') != null ?hashMap.get('200010').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td style="vertical-align: middle;"><p style="color: black">Tahun</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200005') != null ?hashMap.get('200005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Kepemilikan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200011') != null ?hashMap.get('200011').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td style="vertical-align: middle;"><p style="color: black">Isi Silinder</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200012') != null ?hashMap.get('200012').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Jumlah Pemilik</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200012') != null ?hashMap.get('200012').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td style="vertical-align: middle;"><p style="color: black">Nomor Rangka</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200006') != null ?hashMap.get('200006').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Km servis terakhir</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('200013') != null ?hashMap.get('200013').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table">
+                            <tr>
+
+                                <td align="center" style="vertical-align: middle;">
+                                    <img th:src="@{${'/img/' + banjir + '.png'}}" class="container_img"/>
+                                </td>
+                                <td align="center" style="vertical-align: middle;">
+                                    <img th:src="@{${'/img/' + tabrakan + '.png'}}" class="container_img"/>
+                                </td>
+                                <td rowspan="2" colspan="2">
+                                    <b>Estimasi Perawatan: </b>
+                                    <p class="no-margin-bottom">[[${estimasiPerawatan}]].</p>
+                                    <b>Estimasi Perbaikan: </b>
+                                    <p class="no-margin-bottom">[[${estimasiPerbaikan}]].</p>
+                                    <b>Kesimpulan: </b>
+                                    <p class="no-margin-bottom">[[${kesimpulan}]].</p>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center" style="vertical-align: middle;"><img
+                                        th:src="${photoCover}" class="container_img_field"/></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Fitur Kendaraan</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Airbag</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400001') != null ?hashMap.get('400001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Sistem audio</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400002') != null ?hashMap.get('400002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+
+                                <td style="vertical-align: middle;"><p style="color: black">Power window</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400003') != null ?hashMap.get('400003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">EPS/Power stering</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400004') != null ?hashMap.get('400004').value: ':  -' }"></p>
+                                </td>
+
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Sistem AC</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400005') != null ?hashMap.get('400005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Central Lock</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400006') != null ?hashMap.get('400006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Electric Mirror</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('400007') != null ?hashMap.get('400007').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
                                 <td><b>Catatan </b></td>
                                 <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
-                                    [[${inspectionNote.get(result.key)}]]</p>
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Ban</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Ban kiri depan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('500001') != null ?hashMap.get('500001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Ban kiri belakang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('500002') != null ?hashMap.get('500002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Ban kanan depan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('500003') != null ?hashMap.get('500003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Ban kanan belakang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('500004') != null ?hashMap.get('500004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Dashboard dan Electrical</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Diagnosa OBD Scanner</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600001') != null ?hashMap.get('600001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Panel indikator</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600002') != null ?hashMap.get('600002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Setir</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600003') != null ?hashMap.get('600003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Switch lampu</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600004') != null ?hashMap.get('600004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Switch wiper</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600005') != null ?hashMap.get('600005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Panel dashboard</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600006') != null ?hashMap.get('600006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Lampu plafon</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('600007') != null ?hashMap.get('600007').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Instrumen kendaraan</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Rem tangan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700001') != null ?hashMap.get('700001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Rem kaki</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700002') != null ?hashMap.get('700002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pedal Gas</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700003') != null ?hashMap.get('700003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pedal kopling</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700004') != null ?hashMap.get('700004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Sun visor</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700005') != null ?hashMap.get('700005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Spion tengah</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700006') != null ?hashMap.get('700006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pembuka kap mesin</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700007') != null ?hashMap.get('700007').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pembuka bagasi</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700008') != null ?hashMap.get('700008').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pembuka tangki mesin</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('700009') != null ?hashMap.get('700009').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
                                 </td>
                             </tr>
                         </table>
@@ -220,24 +543,611 @@
 
                         <table class="table table-sm">
                             <tr>
-                                <td colspan="4" bgcolor="yellow"></td>
+                                <td colspan="4" class="table-info"><b style="color: black">Interior jok dan trim</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Jok depan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800001') != null ?hashMap.get('800001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Jok belakang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800002') != null ?hashMap.get('800002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Sabuk pengaman</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800003') != null ?hashMap.get('800003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Console box</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800004') != null ?hashMap.get('800004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Trim interior</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800005') != null ?hashMap.get('800005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Bebas banjir</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800006') != null ?hashMap.get('800006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Kaca film</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800007') != null ?hashMap.get('800007').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Handle pintu</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800008') != null ?hashMap.get('800008').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Plafon</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800009') != null ?hashMap.get('800009').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Karpet dasar</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800011') != null ?hashMap.get('800011').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Bau interior</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('800012') != null ?hashMap.get('800012').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Eksterior body</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Feder kanan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900001') != null ?hashMap.get('900001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pintu depan kanan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900002') != null ?hashMap.get('900002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pintu belakang kanan</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900003') != null ?hashMap.get('900003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Lisplang kanan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900004') != null ?hashMap.get('900004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Quarter panel kanan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900005') != null ?hashMap.get('900005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pintu bagasi</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900006') != null ?hashMap.get('900006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Bumper belakang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900007') != null ?hashMap.get('900007').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Quarter panel kiri</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900008') != null ?hashMap.get('900008').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pilar bagasi tengah</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900009') != null ?hashMap.get('900009').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pilar radiator atas</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900011') != null ?hashMap.get('900011').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Apron</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900012') != null ?hashMap.get('900012').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Lispang kiri</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900013') != null ?hashMap.get('900013').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pintu depan kiri</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900014') != null ?hashMap.get('900014').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pintu belakang kiri</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900015') != null ?hashMap.get('900015').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Feder kiri</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900016') != null ?hashMap.get('900016').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Atap</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900017') != null ?hashMap.get('900017').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Kap mesin</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900018') != null ?hashMap.get('900018').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Grill</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900019') != null ?hashMap.get('900019').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Bumper depan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900021') != null ?hashMap.get('900021').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Pilar radiator bawah</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900022') != null ?hashMap.get('900022').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Strut tower kiri</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900023') != null ?hashMap.get('900023').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Strut tower kanan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('900024') != null ?hashMap.get('900024').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Eksterior kaca dan lampu</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Daun wipper</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110001') != null ?hashMap.get('110001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Kaca depan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110002') != null ?hashMap.get('110002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Kaca jendela</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110003') != null ?hashMap.get('110003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Kaca belakang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110004') != null ?hashMap.get('110004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Spion</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110005') != null ?hashMap.get('110005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Lampu depan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110006') != null ?hashMap.get('110006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Lampu belakang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('110007') != null ?hashMap.get('110007').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Eksterior under body</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Velg</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120001') != null ?hashMap.get('120001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Discbrake</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120002') != null ?hashMap.get('120002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Brake pad</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120003') != null ?hashMap.get('120003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Master rem</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120004') != null ?hashMap.get('120004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Shockbreaker</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120005') != null ?hashMap.get('120005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Link stabilizer</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120006') != null ?hashMap.get('120006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Steering rack</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120007') != null ?hashMap.get('120007').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Upper - lower - arm</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120008') != null ?hashMap.get('120008').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Crossmember</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120009') != null ?hashMap.get('120009').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Ball joint</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120011') != null ?hashMap.get('120011').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Knalpot</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120012') != null ?hashMap.get('120012').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Drive shaft</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('120013') != null ?hashMap.get('120013').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Oli dan cairan</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Oli mesin</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('130001') != null ?hashMap.get('130001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Oli Transmisi AT</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('130002') != null ?hashMap.get('130002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Oli rem</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('130003') != null ?hashMap.get('130003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Oli power steering</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('130004') != null ?hashMap.get('130004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Air radiator</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('130005') != null ?hashMap.get('130005').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Ruang mesin</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Cover klep</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140001') != null ?hashMap.get('140001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Cover timing belt</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140002') != null ?hashMap.get('140002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Kondisi seal crank shaft</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140003') != null ?hashMap.get('140003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Transmisi</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140004') != null ?hashMap.get('140004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pompa power steering</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140005') != null ?hashMap.get('140005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Dinamo starter</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140006') != null ?hashMap.get('140006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Pompa power steering</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140007') != null ?hashMap.get('140007').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Dinamo starter</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140008') != null ?hashMap.get('140008').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Water pump</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140009') != null ?hashMap.get('140009').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Kompressor AC</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140011') != null ?hashMap.get('140011').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Belt</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140012') != null ?hashMap.get('140012').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Fan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140013') != null ?hashMap.get('140013').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Radiator</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140014') != null ?hashMap.get('140014').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Kondsensor</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140015') != null ?hashMap.get('140015').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Selang</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140016') != null ?hashMap.get('140016').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Kabel</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140017') != null ?hashMap.get('140017').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Getaran mesin</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140018') != null ?hashMap.get('140018').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Suara mesin</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140019') != null ?hashMap.get('140019').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Karter oli</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140021') != null ?hashMap.get('140021').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Gardan</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140022') != null ?hashMap.get('140022').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Kondisi aki</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('140023') != null ?hashMap.get('140023').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Kelengkapan</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Buku servis</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('150001') != null ?hashMap.get('150001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Buku manual</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('150002') != null ?hashMap.get('150002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Kunci serep</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('150003') != null ?hashMap.get('150003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Ban serep</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('150004') != null ?hashMap.get('150004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Dongkrak dan kunci</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('150005') != null ?hashMap.get('150005').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">Test drive</b>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">RPM Stabil (3000 RPM)</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160001') != null ?hashMap.get('160001').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Performa setir</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160002') != null ?hashMap.get('160002').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Performa kopling</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160003') != null ?hashMap.get('160003').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Perpindahan transmisi</p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160004') != null ?hashMap.get('160004').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Performa rem</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160005') != null ?hashMap.get('160005').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Stir Balance</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160006') != null ?hashMap.get('160006').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td style="vertical-align: middle;"><p style="color: black">Performa suspensi</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160007') != null ?hashMap.get('160007').value: ':  -' }"></p>
+                                </td>
+                                <td style="vertical-align: middle;"><p style="color: black">Bunyi/getaran</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black"
+                                                                       th:text="${hashMap.get('160008') != null ?hashMap.get('160008').value: ':  -' }"></p>
+                                </td>
+                            </tr>
+                            <tr class="table">
+                                <td><b>Catatan </b></td>
+                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
+                                </p>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">FOTO DOKUMEN</b></td>
                             </tr>
 
+                        </table>
+
+                        <table>
                             <tr>
-                                <td colspan="4" align="center" class="table-info"><b style="color: black">FOTO
-                                    KENDARAAN</b></td>
+                                <div class="responsive" th:each="photos : ${photoDokumen}">
+                                    <div class="gallery">
+                                        <div th:text="${photos.key}"></div>
+                                        <img class="container_img_large" th:src="${photos.value}"/>
+                                    </div>
+                                </div>
                             </tr>
+                        </table>
+
+                        <table class="table table-sm">
                             <tr>
-                                <td colspan="4"></td>
+                                <td colspan="4" class="table-info"><b style="color: black">FOTO
+                                    KENDARAAN</b></td>
                             </tr>
                             <tr>
                                 <td><b>Exterior</b></td>
                                 <td colspan="3">
-                                    <table class="table table-sm">
-                                        <tr th:each="photos : ${exteriorPhoto}">
-                                            <img class="container_img_large" th:src="${photos}"/>
+                                    <table>
+                                        <tr>
+                                            <div class="responsive" th:each="photos : ${interiorPhoto}">
+                                                <div class="gallery">
+                                                    <div th:text="${photos.key}"></div>
+                                                    <img class="container_img_large" th:src="${photos.value}"/>
+                                                </div>
+                                            </div>
                                         </tr>
-
                                     </table>
                                 </td>
                             </tr>
@@ -245,33 +1155,57 @@
                             <tr>
                                 <td><b>Interior</b></td>
                                 <td colspan="3">
-                                    <table class="table table-sm">
-                                        <tr th:each="photos : ${interiorPhoto}">
-                                            <img class="container_img_large" th:src="${photos}"/>
+                                    <table>
+                                        <tr>
+                                            <div class="responsive" th:each="photos : ${exteriorPhoto}">
+                                                <div class="gallery">
+                                                    <div th:text="${photos.key}"></div>
+                                                    <img class="container_img_large" th:src="${photos.value}"/>
+                                                </div>
+                                            </div>
                                         </tr>
-
                                     </table>
                             <tr>
-                                <td colspan="4" style="vertical-align: middle;"><p class="no-margin-bottom">
-                                    Catatan : *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi
-                                    Kita.
-                                    Dengan
-                                    menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
-                                    setuju
-                                    dengan Syarat dan Ketentuan yang berlaku.
-                                    *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
-                                    inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap.
-                                    Dan
-                                    sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka apabila
-                                    ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal inspeksi,
-                                    maka
-                                    hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
-                                </td>
+
                             </tr>
                             </td>
                             </tr>
                         </table>
-                    </table>
+
+                        <table class="table table-sm">
+                            <tr>
+                                <td colspan="4" class="table-info"><b style="color: black">FOTO LAINNYA</b></td>
+                            </tr>
+                            <table>
+                                <tr>
+                                    <div class="responsive" th:each="photos : ${lainnyaPhoto}">
+                                        <div class="gallery">
+                                            <div th:text="${photos.key}"></div>
+                                            <img class="container_img_large" th:src="${photos.value}"/>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </table>
+                        </table>
+
+
+                        <td colspan="4" style="vertical-align: middle;"><p class="no-margin-bottom">
+                            Catatan : *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi
+                            Kita.
+                            Dengan
+                            menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
+                            setuju
+                            dengan Syarat dan Ketentuan yang berlaku.
+                            *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
+                            inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap.
+                            Dan
+                            sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka apabila
+                            ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal inspeksi,
+                            maka
+                            hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+                        </td>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -347,6 +1281,70 @@
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,9 @@
 package com.garasi.kita.inspection.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.*;
 import com.garasi.kita.inspection.repositories.InspectionRepository;
@@ -10,6 +14,8 @@ import com.garasi.kita.inspection.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -125,55 +132,224 @@ public class InspectionController {
     @GetMapping("/detailInspection")
     public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {
         HashMap<Integer, String> noteInspection = new HashMap<>();
-        String[] label = {"Inspection", "Data Kendaraan", "DOKUMEN", "FITUR", "Data7", "Data8", "Data9", "Data10", "Data11", "Data12", "Data13", "Data14"};
+        String label[] = {"Inspection", "Data Konsumen", "Data lengkap kendaraan", "Dokumen kendaraan", "Fitur Kendaraan", "Ban", "Dashboard dan electrical", "Instrumen kendaraan", "Interior jok dan trim", "Eksterior body", "Eksterior kaca dan lampu", "Eksterior under body", "Oli dan cairan", "Ruang mesin", "Kelengkapan", "Test drive", "General summary"};
+
         model.addAttribute("appName", appName);
 
         Inspection inspection = dao.getDataInspection(kode);
         HashMap<Integer, List<InspectionDetailPhoto>> stringListHashMap = new HashMap<>();
-        List<InspectionDetailPhoto> inspectionDetailList = new ArrayList<>();
-        Integer keyCurrent = 0;
+
+        HashMap<String, InspectionDetail> hashMap = new HashMap<>();
+        String bebasBanjir = "logo";
+        String tabrakan = "logo";
         for (InspectionDetail inspectionDetail : dao.getDatainpectionDetailService(kode)) {
-            if (keyCurrent != Integer.parseInt(inspectionDetail.getIdField().substring(0, 1))) {
-                inspectionDetailList = new ArrayList<>();
-                keyCurrent = Integer.parseInt(inspectionDetail.getIdField().substring(0, 1));
+            try {
+                ValueModel valueModel = new ObjectMapper().readValue(inspectionDetail.getValue(), ValueModel.class);
+                String commaSeparatedString = "";
+                if (valueModel.getOption().size() > 0) {
+                    commaSeparatedString = String.join(", ", valueModel.getOption());
+                }
+                inspectionDetail.setValue(": " + commaSeparatedString);
+            } catch (Exception e) {
+                inspectionDetail.setValue(": " + inspectionDetail.getValue().replace("{", "").replace("}", ""));
             }
 
-            if (Integer.parseInt(inspectionDetail.getIdField().substring(5, 6)) == 0) {
-                noteInspection.put(keyCurrent, inspectionDetail.getValue());
-            } else {
-                InspectionDetailPhoto inspectionDetailPhoto = new InspectionDetailPhoto();
-                inspectionDetailPhoto.setId(inspectionDetail.getId());
-                inspectionDetailPhoto.setKodeBooking(inspectionDetail.getKodeBooking());
-                inspectionDetailPhoto.setIdField(inspectionDetail.getIdField());
-                inspectionDetailPhoto.setLabel(inspectionDetail.getLabel());
-                inspectionDetailPhoto.setValue(inspectionDetail.getValue());
+            hashMap.put(inspectionDetail.getIdField(), inspectionDetail);
 
-                inspectionDetailPhoto.setPhoto(dao.getDataInspectionDetailPhoto(inspectionDetail.getKodeBooking(), inspectionDetail.getIdField()));
-
-                inspectionDetailList.add(inspectionDetailPhoto);
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170001")) {
+                if (inspectionDetail.getValue().equalsIgnoreCase("YA")) {
+                    bebasBanjir = "banjir";
+                } else if (inspectionDetail.getValue().equalsIgnoreCase("TIDAK")) {
+                    bebasBanjir = "banjir_no";
+                }
             }
 
-            stringListHashMap.put(Integer.parseInt(inspectionDetail.getIdField().substring(0, 1)), inspectionDetailList);
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170002")) {
+                if (inspectionDetail.getValue().equalsIgnoreCase("YA")) {
+                    tabrakan = "tabrakan";
+                } else if (inspectionDetail.getValue().equalsIgnoreCase("TIDAK")) {
+                    tabrakan = "tabrakan_no";
+                }
+            }
 
         }
 
         model.addAttribute("estimasiPerbaikan", "harga perbaikan sama dengan");
         model.addAttribute("estimasiPerawatan", "harga perawatan sama dengan");
         model.addAttribute("kesimpulan", "jadi kesimpulannya adalah");
-        model.addAttribute("grade", "A");
 
-        //dummy
-        ArrayList<String> photo = new ArrayList<>();
-        photo.add("https://1.bp.blogspot.com/-zH4J9gq-zHE/W2HhUs1hq8I/AAAAAAAADNE/0_XZzXNPIMsz5_9tNGoTPeSEz9mpizPxgCEwYBhgL/s1600/130625-F-BH566-591.jpeg");
-        photo.add("https://i.ytimg.com/vi/5mQEuso00d4/maxresdefault.jpg");
-
-        model.addAttribute("interiorPhoto", photo);
-        model.addAttribute("exteriorPhoto", photo);
+        model.addAttribute("banjir", bebasBanjir);
+        model.addAttribute("tabrakan", tabrakan);
 
         model.addAttribute("titleQuestion", label);
         model.addAttribute("inspection", inspection);
         model.addAttribute("inspectionNote", noteInspection);
         model.addAttribute("inspectionDetail", stringListHashMap);
+        model.addAttribute("hashMap", hashMap);
+
+
+        ArrayList<String> fdl = new ArrayList<>();
+        fdl.add("BPKB;310001");
+        fdl.add("STNK;310002");
+        fdl.add("Faktur;310003");
+        fdl.add("Foto lainnya;310004");
+
+        LinkedHashMap<String, String> listPhotoDokument = new LinkedHashMap<>();
+        for (String fd : fdl) {
+            int pos = 1;
+            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                listPhotoDokument.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
+            }
+        }
+        model.addAttribute("photoDokumen", listPhotoDokument);
+
+
+        ArrayList<String> inl = new ArrayList<>();
+        inl.add("Kilometer(rpm 3000);410001");
+        inl.add("Interior Depan;410002");
+        inl.add("Interior Belakang;410003");
+        inl.add("Dashboard;410004");
+        inl.add("Bagasi Terbuka;410005");
+
+        LinkedHashMap<String, String> listPhotoInterior = new LinkedHashMap<>();
+        for (String fd : inl) {
+            int pos = 1;
+            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                listPhotoInterior.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
+            }
+        }
+        model.addAttribute("interiorPhoto", listPhotoInterior);
+
+        ArrayList<String> exl = new ArrayList<>();
+        exl.add("Tampak Depan;420001");
+        exl.add("Tampak Depan Kanan;420002");
+        exl.add("Tampak Depan Kiri;420003");
+        exl.add("Tampak Atap;420004");
+        exl.add("Tampak Belakang;420005");
+
+        String photoCover = "https://www.allianceplast.com/wp-content/uploads/no-image-1024x1024.png";
+        LinkedHashMap<String, String> listPhotoExterior = new LinkedHashMap<>();
+        for (String fd : exl) {
+            int pos = 1;
+            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                if (fd.split(";")[0].equalsIgnoreCase("Tampak Depan")) {
+                    photoCover = pathUrl + pp;
+                }
+                listPhotoExterior.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
+            }
+        }
+        model.addAttribute("exteriorPhoto", listPhotoExterior);
+        model.addAttribute("photoCover", photoCover);
+
+        ArrayList<String> llp = new ArrayList<>();
+        llp.add("Ban kiri depan;500001");
+        llp.add("Ban kiri belakang;500002");
+        llp.add("Ban kanan depan;500003");
+        llp.add("Ban kanan belakang;500004");
+        llp.add("Diagnosa OBD Scanner;600001");
+        llp.add("Panel;600002");
+        llp.add("Setir;600003");
+        llp.add("Switch lampu;600004");
+        llp.add("Switch wiper;600005");
+        llp.add("Panel dashboard;600006");
+        llp.add("Lampu plafon;600007");
+        llp.add("Rem tangan;700001");
+        llp.add("Rem kaki;700002");
+        llp.add("Pedal Gas;700003");
+        llp.add("Pedal kopling;700004");
+        llp.add("Sun visor;700005");
+        llp.add("Spion tengah;700006");
+        llp.add("Pembuka kap mesin;700007");
+        llp.add("Pembuka bagasi;700008");
+        llp.add("Pembuka tangki mesin;700009");
+        llp.add("Jok depan;800001");
+        llp.add("Jok belakang;800002");
+        llp.add("Sabuk pengaman;800003");
+        llp.add("Console box;800004");
+        llp.add("Trim interior;800005");
+        llp.add("Bebas banjir;800006");
+        llp.add("Kaca film;800007");
+        llp.add("Handle pintu;800008");
+        llp.add("Plafon;800009");
+        llp.add("Karpet dasar;800011");
+        llp.add("Bau interior;800012");
+        llp.add("Feder kanan;900001");
+        llp.add("Pintu depan kanan;900002");
+        llp.add("Pintu belakang kanan;900003");
+        llp.add("Lisplang kanan;900004");
+        llp.add("Quarter panel kanan;900005");
+        llp.add("Pintu bagasi;900006");
+        llp.add("Bumper belakang;900007");
+        llp.add("Quarter panel kiri;900008");
+        llp.add("Pilar bagasi tengah;900009");
+        llp.add("Pilar radiator atas;900011");
+        llp.add("Apron;900012");
+        llp.add("Lispang kiri;900013");
+        llp.add("Pintu depan kiri;900014");
+        llp.add("Pintu belakang kiri;900015");
+        llp.add("Feder kiri;900016");
+        llp.add("Atap;900017");
+        llp.add("Kap mesin;900018");
+        llp.add("Grill;900019");
+        llp.add("Bumper depan;900021");
+        llp.add("Pilar radiator bawah;900022");
+        llp.add("Strut tower kiri;900023");
+        llp.add("Strut tower kanan;900024");
+        llp.add("Daun wipper;110001");
+        llp.add("Kaca depan;110002");
+        llp.add("Kaca jendela;110003");
+        llp.add("Kaca belakang;110004");
+        llp.add("Spion;110005");
+        llp.add("Lampu depan;110006");
+        llp.add("Lampu belakang;110007");
+        llp.add("Velg;120001");
+        llp.add("Discbrake;120002");
+        llp.add("Brake pad ;120003");
+        llp.add("Master rem;120004");
+        llp.add("Shockbreaker;120005");
+        llp.add("Link stabilizer;120006");
+        llp.add("Steering rack;120007");
+        llp.add("Upper - lower - arm;120008");
+        llp.add("Crossmember;120009");
+        llp.add("Ball joint;120011");
+        llp.add("Knalpot;120012");
+        llp.add("Drive shaft;120013");
+        llp.add("Oli mesin;130001");
+        llp.add("Oli Transmisi AT;130002");
+        llp.add("Oli rem;130003");
+        llp.add("Oli power steering;130004");
+        llp.add("Air radiator;130005");
+        llp.add("Cover klep;140001");
+        llp.add("Cover timing belt;140002");
+        llp.add("Kondisi seal crank shaft;140003");
+        llp.add("Transmisi;140004");
+        llp.add("Pompa power steering;140005");
+        llp.add("Dinamo starter;140006");
+        llp.add("Alternator;140007");
+        llp.add("Water pump;140008");
+        llp.add("Kompressor AC;140009");
+        llp.add("Belt;140011");
+        llp.add("Fan;140012");
+        llp.add("Radiator;140013");
+        llp.add("Kondsensor;140014");
+        llp.add("Selang;140015");
+        llp.add("Kabel;140016");
+        llp.add("Getaran mesin;140017");
+        llp.add("Suara mesin;140018");
+        llp.add("Karter oli;140019");
+        llp.add("Gardan;140021");
+        llp.add("Kondisi aki;140022");
+
+        LinkedHashMap<String, String> lainnyaPhoto = new LinkedHashMap<>();
+        for (String fd : llp) {
+            int pos = 1;
+            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                lainnyaPhoto.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
+            }
+        }
+        model.addAttribute("lainnyaPhoto", lainnyaPhoto);
+
+
         return "detail_inspection";
     }
 

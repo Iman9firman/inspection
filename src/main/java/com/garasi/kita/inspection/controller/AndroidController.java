@@ -82,11 +82,17 @@ public class AndroidController {
     @PostMapping("/android")
     public ResponseEntity<Object> saveInspectionDetail(@RequestBody Map<String, List<InspectionDetail>> inspectionDetail,
                                                        HttpServletRequest request) {
+        // update status inspection menjadi 2
         boolean finish = false;
+
         for (InspectionDetail inspectionDetail1 : inspectionDetail.get("inspectionDetail")) {
+            dao.updateInspection(inspectionDetail1.getKodeBooking());
             int update = dao.update(inspectionDetail1);
             if (update == 0) {
                 inpectionDetailService.saveData(inspectionDetail1);
+            }
+            if (inspectionDetail1.getIdField().startsWith("1800")) {
+                finish = true;
             }
         }
         HashMap<String, String> result = new HashMap<>();

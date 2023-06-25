@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.garasi.kita'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.6-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -16,7 +16,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
- //   implementation 'org.springframework.boot:spring-boot-starter-security'
+    //   implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -29,10 +29,10 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  //  testImplementation 'org.springframework.security:spring-security-test'
+    //  testImplementation 'org.springframework.security:spring-security-test'
 
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

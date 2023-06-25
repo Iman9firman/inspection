@@ -89,4 +89,10 @@ public class RepoDaoImpl implements RepoDao {
         String query = "UPDATE inspection_detail set value='" + data.getValue() + "' WHERE kode_booking = '" + data.getKodeBooking() + "' and id_field = '" + data.getIdField() + "'";
         return jdbcTemplate.update(query);
     }
+
+    @Override
+    public int updateInspection(String kodeBooking) {
+        String query = "UPDATE inspection set status= 2 WHERE kode_booking = '" + kodeBooking + "' ";
+        return jdbcTemplate.update(query);
+    }
 }

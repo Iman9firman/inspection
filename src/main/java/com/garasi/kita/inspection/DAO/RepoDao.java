@@ -20,5 +20,5 @@ public interface RepoDao {
     void removePhoto(String name);
 
     int update(InspectionDetail data);
-
+    int updateInspection(String data);
 }
