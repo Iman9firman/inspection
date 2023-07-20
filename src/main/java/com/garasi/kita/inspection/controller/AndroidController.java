@@ -117,7 +117,7 @@ public class AndroidController {
     @PostMapping("/photo/{kode_booking}/{id_field}")
     public ResponseEntity<Object> uploadImage(@PathVariable("kode_booking") String
                                                       kodeBooking, @PathVariable("id_field") String idField, @RequestParam String
-                                                      androidPath, @RequestParam("image") MultipartFile file) throws IOException {
+                                                      androidPath, @RequestParam("image") MultipartFile file, @RequestParam String caption) throws IOException {
         if (!file.isEmpty()) {
             String type = ".jpg";
             try {
@@ -137,6 +137,7 @@ public class AndroidController {
             photoItem.setKodeBooking(kodeBooking);
             photoItem.setAndroidPath(androidPath);
             photoItem.setPath(name);
+            photoItem.setCaption(caption);
 
             photoItemService.saveData(photoItem);
             HashMap<String, String> result = new HashMap<>();

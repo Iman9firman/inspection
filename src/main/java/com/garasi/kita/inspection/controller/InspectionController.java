@@ -7,15 +7,15 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.*;
 import com.garasi.kita.inspection.repositories.InspectionRepository;
-import com.garasi.kita.inspection.service.InpectionDetailService;
-import com.garasi.kita.inspection.service.InpectionService;
-import com.garasi.kita.inspection.service.PhotoItemService;
-import com.garasi.kita.inspection.service.UserService;
+import com.garasi.kita.inspection.service.*;
+import com.lowagie.text.ListItem;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -62,6 +64,8 @@ public class InspectionController {
     @Autowired
     private RepoDao dao;
 
+    @Autowired
+    private ExportPdfService exportPdfService;
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -129,6 +133,15 @@ public class InspectionController {
         return "inspection_list";
     }
 
+    @GetMapping("/downloadInspection2")
+    public void downloadReceipt2(HttpServletResponse response, @RequestParam("kode_booking") String kode) throws IOException {
+        ByteArrayInputStream exportedData = exportPdfService.exportReceiptPdf("receipt_dua", dataDetailInspection(kode));
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" + kode + ".pdf");
+        IOUtils.copy(exportedData, response.getOutputStream());
+    }
+
+
     @GetMapping("/detailInspection")
     public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {
         HashMap<Integer, String> noteInspection = new HashMap<>();
@@ -142,41 +155,102 @@ public class InspectionController {
         HashMap<String, InspectionDetail> hashMap = new HashMap<>();
         String bebasBanjir = "logo";
         String tabrakan = "logo";
+
+        String perawatan = "-";
+        String perbaikan = "-";
+        String kesimpulan = "-";
+
+        //note
+
+        LinkedHashMap<String, List<String>> notes = new LinkedHashMap<>();
+
+        Integer[] array = {40, 50, 60, 70, 80, 90, 11, 12, 13, 14, 15};
+        List<Integer> list = Arrays.asList(array);
+
+
         for (InspectionDetail inspectionDetail : dao.getDatainpectionDetailService(kode)) {
             try {
-                ValueModel valueModel = new ObjectMapper().readValue(inspectionDetail.getValue(), ValueModel.class);
+
+                ValueModel valueModel = new ObjectMapper().readValue(inspectionDetail.getValue().replaceAll("(\r\n|\n)", "</br>"),
+                        ValueModel.class);
                 String commaSeparatedString = "";
-                if (valueModel.getOption().size() > 0) {
-                    commaSeparatedString = String.join(", ", valueModel.getOption());
+                if (valueModel.getOption() != null) {
+                    if (valueModel.getOption().size() > 0) {
+                        commaSeparatedString = String.join(", ", valueModel.getOption());
+                    }
+
+                    if (valueModel.getValue() != null) {
+                        if (list.indexOf(Integer.valueOf(inspectionDetail.getIdField().substring(0, 2))) >= 0) {
+                            List<String> listnote = notes.get(inspectionDetail.getIdField().substring(0, 2));
+                            if (listnote == null) {
+                                listnote = new ArrayList<>();
+                            }
+                            listnote.add(inspectionDetail.getLabel() + " : " + valueModel.getValue().replace("</br>", "\n"));
+                            notes.put(inspectionDetail.getIdField().substring(0, 2), listnote);
+                        } else {
+                            inspectionDetail.setValue(": " + valueModel.getValue() != null ? valueModel.getValue() : ": -");
+                        }
+                    }
+
+                } else {
+                    if (valueModel.getValue() != null) {
+                        commaSeparatedString = valueModel.getValue() != null ? valueModel.getValue() : " - ";
+                    }
                 }
-                inspectionDetail.setValue(": " + commaSeparatedString);
+
+                if (commaSeparatedString.length() == 0) {
+                    commaSeparatedString = "-";
+                }
+
+                inspectionDetail.setValue(": " + commaSeparatedString.replace("</br>", "\n"));
+
             } catch (Exception e) {
-                inspectionDetail.setValue(": " + inspectionDetail.getValue().replace("{", "").replace("}", ""));
+                String value = inspectionDetail.getValue().replace("{", "").replace("}", "");
+                if (value.length() == 0) {
+                    value = "-";
+                }
+
+                inspectionDetail.setValue(": " + value);
             }
 
             hashMap.put(inspectionDetail.getIdField(), inspectionDetail);
 
             if (inspectionDetail.getIdField().equalsIgnoreCase("170001")) {
-                if (inspectionDetail.getValue().equalsIgnoreCase("YA")) {
+                String value = inspectionDetail.getValue().replace(": ", "");
+                if (value.equalsIgnoreCase("YA") || value.equalsIgnoreCase("Bekas banjir")) {
                     bebasBanjir = "banjir";
-                } else if (inspectionDetail.getValue().equalsIgnoreCase("TIDAK")) {
+                } else if (value.equalsIgnoreCase("TIDAK") || value.equalsIgnoreCase("Bebas banjir")) {
                     bebasBanjir = "banjir_no";
                 }
             }
 
             if (inspectionDetail.getIdField().equalsIgnoreCase("170002")) {
-                if (inspectionDetail.getValue().equalsIgnoreCase("YA")) {
+                String value = inspectionDetail.getValue().replace(": ", "");
+                if (value.equalsIgnoreCase("YA") || value.equalsIgnoreCase("Bekas tabrakan")) {
                     tabrakan = "tabrakan";
-                } else if (inspectionDetail.getValue().equalsIgnoreCase("TIDAK")) {
+                } else if (value.equalsIgnoreCase("TIDAK") || value.equalsIgnoreCase("Bebas tabrakan")) {
                     tabrakan = "tabrakan_no";
                 }
             }
 
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170003")) {
+                perawatan = inspectionDetail.getValue().replace(": ", "");
+            }
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170004")) {
+                perbaikan = inspectionDetail.getValue().replace(": ", "");
+            }
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170005")) {
+                kesimpulan = inspectionDetail.getValue().replace(": ", "");
+            }
+
         }
 
-        model.addAttribute("estimasiPerbaikan", "harga perbaikan sama dengan");
-        model.addAttribute("estimasiPerawatan", "harga perawatan sama dengan");
-        model.addAttribute("kesimpulan", "jadi kesimpulannya adalah");
+        model.addAttribute("estimasiPerbaikan", perbaikan);
+        model.addAttribute("estimasiPerawatan", perawatan);
+        model.addAttribute("kesimpulan", kesimpulan);
 
         model.addAttribute("banjir", bebasBanjir);
         model.addAttribute("tabrakan", tabrakan);
@@ -192,16 +266,9 @@ public class InspectionController {
         fdl.add("BPKB;310001");
         fdl.add("STNK;310002");
         fdl.add("Faktur;310003");
-        fdl.add("Foto lainnya;310004");
+        fdl.add(";310004");
 
-        LinkedHashMap<String, String> listPhotoDokument = new LinkedHashMap<>();
-        for (String fd : fdl) {
-            int pos = 1;
-            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
-                listPhotoDokument.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
-            }
-        }
-        model.addAttribute("photoDokumen", listPhotoDokument);
+        model.addAttribute("photoDokumen", listPhoto(kode, fdl));
 
 
         ArrayList<String> inl = new ArrayList<>();
@@ -211,14 +278,7 @@ public class InspectionController {
         inl.add("Dashboard;410004");
         inl.add("Bagasi Terbuka;410005");
 
-        LinkedHashMap<String, String> listPhotoInterior = new LinkedHashMap<>();
-        for (String fd : inl) {
-            int pos = 1;
-            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
-                listPhotoInterior.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
-            }
-        }
-        model.addAttribute("interiorPhoto", listPhotoInterior);
+        model.addAttribute("interiorPhoto", listPhoto(kode, inl));
 
         ArrayList<String> exl = new ArrayList<>();
         exl.add("Tampak Depan;420001");
@@ -228,20 +288,27 @@ public class InspectionController {
         exl.add("Tampak Belakang;420005");
 
         String photoCover = "https://www.allianceplast.com/wp-content/uploads/no-image-1024x1024.png";
-        LinkedHashMap<String, String> listPhotoExterior = new LinkedHashMap<>();
         for (String fd : exl) {
-            int pos = 1;
-            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+            for (PhotoItem pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                pp.setPath(pathUrl + pp.getPath());
                 if (fd.split(";")[0].equalsIgnoreCase("Tampak Depan")) {
-                    photoCover = pathUrl + pp;
+                    photoCover = pp.getPath();
                 }
-                listPhotoExterior.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
             }
         }
-        model.addAttribute("exteriorPhoto", listPhotoExterior);
+        model.addAttribute("exteriorPhoto", listPhoto(kode, exl));
+
+
         model.addAttribute("photoCover", photoCover);
 
         ArrayList<String> llp = new ArrayList<>();
+        llp.add("Airbag;400001");
+        llp.add("Sistem audio;400002");
+        llp.add("Power window;400003");
+        llp.add("EPS/Power stering;400004");
+        llp.add("Sistem AC;400005");
+        llp.add("Central Lock;400006");
+        llp.add("Electric Mirror;400007");
         llp.add("Ban kiri depan;500001");
         llp.add("Ban kiri belakang;500002");
         llp.add("Ban kanan depan;500003");
@@ -340,18 +407,17 @@ public class InspectionController {
         llp.add("Gardan;140021");
         llp.add("Kondisi aki;140022");
 
-        LinkedHashMap<String, String> lainnyaPhoto = new LinkedHashMap<>();
-        for (String fd : llp) {
-            int pos = 1;
-            for (String pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
-                lainnyaPhoto.put(fd.split(";")[0] + " " + pos++, pathUrl + pp);
-            }
-        }
-        model.addAttribute("lainnyaPhoto", lainnyaPhoto);
+        model.addAttribute("lainnyaPhoto", listPhoto(kode, llp));
 
+        ArrayList<String> sop = new ArrayList<>();
+        sop.add(";170006");
+        model.addAttribute("photoSOP", listPhoto(kode, sop));
+
+        model.addAttribute("notes", notes);
 
         return "detail_inspection";
     }
+
 
     @PostMapping("/inputCustomer")
     public String greetingSubmit(Model model, @ModelAttribute Inspection inspection) {
@@ -373,6 +439,27 @@ public class InspectionController {
         inpectionService.saveData(inspection);
 
         return "redirect:/";
+    }
+
+    private List<PhotoItem> listPhoto(String kode, ArrayList<String> fdl) {
+        List<PhotoItem> listPhotos = new ArrayList<>();
+        for (String fd : fdl) {
+            for (PhotoItem pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                pp.setPath(pathUrl + pp.getPath());
+                String title = fd.split(";")[0];
+                if (title.length() == 0) {
+                    title = pp.getCaption();
+                }
+                pp.setAndroidPath(title);
+                listPhotos.add(pp);
+            }
+        }
+
+        return listPhotos;
+    }
+
+    private HashMap<String, Object> dataDetailInspection(String kode) {
+        return null;
     }
 
 

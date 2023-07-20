@@ -2,6 +2,7 @@ package com.garasi.kita.inspection.DAO;
 
 import com.garasi.kita.inspection.model.Inspection;
 import com.garasi.kita.inspection.model.InspectionDetail;
+import com.garasi.kita.inspection.model.PhotoItem;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -65,12 +66,11 @@ public class RepoDaoImpl implements RepoDao {
     }
 
     @Override
-    public List<String> getDataInspectionDetailPhoto(String kodeBooking, String idField) {
-        List<String> photo = null;
-        String query = "SELECT path FROM `photo_item` WHERE `kode_booking` = '" + kodeBooking + "' AND `id_field` = '" + idField + "'";
+    public List<PhotoItem> getDataInspectionDetailPhoto(String kodeBooking, String idField) {
+        List<PhotoItem> photo = new ArrayList<>();
+        String query = "SELECT * FROM `photo_item` WHERE `kode_booking` = '" + kodeBooking + "' AND `id_field` = '" + idField + "'";
         try {
-            photo = new ArrayList<>();
-            photo = jdbcTemplate.queryForList(query, new Object[]{}, String.class);
+            photo = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(PhotoItem.class));
             return photo;
         } catch (Exception e) {
             LoggerFactory.getLogger(getClass()).error("Error get task ", e);

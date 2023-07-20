@@ -2,6 +2,7 @@ package com.garasi.kita.inspection.DAO;
 
 import com.garasi.kita.inspection.model.Inspection;
 import com.garasi.kita.inspection.model.InspectionDetail;
+import com.garasi.kita.inspection.model.PhotoItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface RepoDao {
 
     List<InspectionDetail> getDatainpectionDetailService(String kode);
 
-    List<String> getDataInspectionDetailPhoto(String kodeBooking, String idField);
+    List<PhotoItem> getDataInspectionDetailPhoto(String kodeBooking, String idField);
 
     void removePhoto(String name);
 

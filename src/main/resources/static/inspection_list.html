@@ -114,8 +114,12 @@
                                               class="badge badge-pill badge-success">Done</span>
                                     </td>
                                     <td>
-                                        <a  th:if="${result.status == 2}" th:href="@{${'/detailInspection?kode_booking='+result.kodeBooking}}"
+                                        <a th:if="${result.status == 2}"
+                                           th:href="@{${'/detailInspection?kode_booking='+result.kodeBooking}}"
                                            class="btn btn-outline-success">Detail</a>
+                                        <a th:if="${result.status == 2}"
+                                           th:href="@{${'/downloadInspection?kode_booking='+result.kodeBooking}}"
+                                           class="btn btn-outline-success">Print</a>
                                     </td>
                                 </tr>
                                 </tbody>

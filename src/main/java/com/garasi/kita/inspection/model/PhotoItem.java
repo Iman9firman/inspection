@@ -17,4 +17,5 @@ public class PhotoItem {
     String idField;
     String path;
     String androidPath;
+    String caption;
 }

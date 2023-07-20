@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
 
     <title>GKI</title>
 
     <!-- Custom fonts for this template -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"/>
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+            rel="stylesheet"/>
 
     <!-- Custom styles for this template -->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 
     <style>
        .container_img
@@ -62,10 +62,11 @@
 
 div.gallery img {
   width: 100%;
-  height: auto;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
+  height: 33%;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 25px;
 }
 
 div.desc {
@@ -80,7 +81,7 @@ div.desc {
 .responsive {
   padding: 0 6px;
   float: left;
-  width: 24.99999%;
+  width: 33.3333%;
 }
 
 @media only screen and (max-width: 700px) {
@@ -114,60 +115,33 @@ div.desc {
         }
 
 
+@media print {
+    tr.vendorListHeading {
+        background-color: #1a4567 !important;
+        print-color-adjust: exact;
+    }
+}
+
+@media print {
+    .vendorListHeading th {
+        color: white !important;
+    }
+}
 
 
+.table-info {
+  width: 100%;
+   background-color: #e9e4f3;
+}
 
+pre {
+    white-space: pre-wrap; /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
@@ -212,37 +186,38 @@ div.desc {
 
             <!-- Begin Page Content -->
             <div>
+
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
-                      integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"/>
+                      integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"
+                      media="screen"/>
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800"></h1>
                 </div>
 
                 <div class="container_page">
-                    <div class="table">
-                        <table class="table">
-                            <tr>
-                                <td rowspan="3" align="center" style="vertical-align: middle;"><img
-                                        src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
-                                        class="container_img"/></td>
-                                <td rowspan="3">&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="2">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b style="color: black">Tanggal Inspeksi : [[${inspection.tanggal}]]</b>
-                                </td>
 
-                            </tr>
-                            <tr>
-                                <td colspan="4" bgcolor="red"><h4 style="color: azure">KODE BOOKING INSPEKSI : <b>[[${inspection.kodeBooking}]]</b>
-                                </h4></td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table">
+                        <tr>
+                            <td rowspan="3" align="center" style="vertical-align: middle;"><img
+                                    src="https://garasikitaindonesia.com/wp-content/uploads/2023/03/LOGO-GIK-1024x660.png"
+                                    class="container_img"/></td>
+                            <td rowspan="3">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b style="color: black">Tanggal Inspeksi : [[${inspection.tanggal}]]</b>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="4" bgcolor="#082f3a"><h4 style="color: azure">KODE BOOKING INSPEKSI : <b>[[${inspection.kodeBooking}]]</b>
+                            </h4></td>
+                        </tr>
+                    </table>
 
                     <div class="field">
                         <table class="table table-sm">
@@ -250,7 +225,7 @@ div.desc {
                                 <td><p style="color: black">Nomor Polisi</p></td>
                                 <td><p style="color: black"
                                        th:text="${hashMap.get('200001') != null ?hashMap.get('200001').value: ':  -' }"></p>
-                                    <p></td>
+                                </td>
                                 <td><p style="color: black">Warna Eksterior/Interior</p></td>
                                 <td><p style="color: black"
                                        th:text="${hashMap.get('200008') != null ?hashMap.get('200008').value: ':  -' }"></p>
@@ -301,9 +276,9 @@ div.desc {
                                 </td>
                             </tr>
                             <tr class="table-secondary">
-                                <td style="vertical-align: middle;"><p style="color: black">Isi Silinder</p></td>
+                                <td style="vertical-align: middle;"><p style="color: black">Nomor Mesin</p></td>
                                 <td style="vertical-align: middle;"><p style="color: black"
-                                                                       th:text="${hashMap.get('200012') != null ?hashMap.get('200012').value: ':  -' }"></p>
+                                                                       th:text="${hashMap.get('200007') != null ?hashMap.get('200007').value: ':  -' }"></p>
                                 </td>
                                 <td style="vertical-align: middle;"><p style="color: black">Jumlah Pemilik</p></td>
                                 <td style="vertical-align: middle;"><p style="color: black"
@@ -326,19 +301,18 @@ div.desc {
                             <tr>
 
                                 <td align="center" style="vertical-align: middle;">
-                                    <img th:src="@{${'/img/' + banjir + '.png'}}" class="container_img"/>
+                                    <img th:src="@{${'~/img/' + banjir + '.png'}}" class="container_img"/>
                                 </td>
                                 <td align="center" style="vertical-align: middle;">
-                                    <img th:src="@{${'/img/' + tabrakan + '.png'}}" class="container_img"/>
+                                    <img th:src="@{${'~/img/' + tabrakan + '.png'}}" class="container_img"/>
                                 </td>
                                 <td rowspan="2" colspan="2">
                                     <b>Estimasi Perawatan: </b>
-                                    <p class="no-margin-bottom">[[${estimasiPerawatan}]].</p>
+                                    <pre>[[${estimasiPerawatan}]]</pre>
                                     <b>Estimasi Perbaikan: </b>
-                                    <p class="no-margin-bottom">[[${estimasiPerbaikan}]].</p>
+                                    <pre>[[${estimasiPerbaikan}]]</pre>
                                     <b>Kesimpulan: </b>
-                                    <p class="no-margin-bottom">[[${kesimpulan}]].</p>
-
+                                    <pre>[[${kesimpulan}]]</pre>
                                 </td>
                             </tr>
                             <tr>
@@ -392,8 +366,8 @@ div.desc {
                             </tr>
                             <tr class="table">
                                 <td><b>Catatan </b></td>
-                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
-                                </p>
+                                <td colspan="3" style="vertical-align: middle;">
+                                    <li th:each="item : ${notes.get('40')}" th:text="${item}"></li>
                                 </td>
                             </tr>
                         </table>
@@ -425,8 +399,8 @@ div.desc {
                             </tr>
                             <tr class="table">
                                 <td><b>Catatan </b></td>
-                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
-                                </p>
+                                <td colspan="3" style="vertical-align: middle;">
+                                    <li th:each="item : ${notes.get('50')}" th:text="${item}"></li>
                                 </td>
                             </tr>
                         </table>
@@ -474,8 +448,8 @@ div.desc {
                             </tr>
                             <tr class="table">
                                 <td><b>Catatan </b></td>
-                                <td colspan="3" style="vertical-align: middle;"><p class="no-margin-bottom">:
-                                </p>
+                                <td colspan="3" style="vertical-align: middle;">
+                                    <li th:each="item : ${notes.get('60')}" th:text="${item}"></li>
                                 </td>
                             </tr>
                         </table>
@@ -1112,105 +1086,108 @@ div.desc {
                             </tr>
                         </table>
 
+                    </div>
 
-                        <table class="table table-sm">
-                            <tr>
-                                <td colspan="4" class="table-info"><b style="color: black">FOTO DOKUMEN</b></td>
-                            </tr>
+                    <table class="table table-sm">
+                        <tr>
+                            <td colspan="3" class="table-info"><b style="color: black">FOTO DOKUMEN</b></td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <div class="responsive" th:each="photos : ${photoDokumen}">
+                                <div class="gallery">
+                                    <div>
+                                        <b>[[${photos.androidPath}]]</b>
+                                    </div>
+                                    <img class="container_img_large" th:src="${photos.path}"/>
+                                </div>
+                            </div>
+                        </tr>
+                    </table>
 
-                        </table>
+                    <table class="table table-sm">
+                        <tr>
+                            <td colspan="3" class="table-info"><b style="color: black">FOTO
+                                KENDARAAN</b></td>
+                        </tr>
+                        <tr>
+                            <td><b>Interior</b></td>
+                            <td colspan="3">
+                                <table>
+                                    <tr>
+                                        <div class="responsive" th:each="photos : ${interiorPhoto}">
+                                            <div class="gallery">
+                                                <div>
+                                                    <b>[[${photos.androidPath}]]</b>
+                                                </div>
+                                                <img class="container_img_large" th:src="${photos.path}"/>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
 
+                        <tr>
+                            <td><b>Exterior</b></td>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <div class="responsive" th:each="photos : ${exteriorPhoto}">
+                                            <div class="gallery">
+                                                <div>
+                                                    <b>[[${photos.androidPath}]]</b>
+                                                </div>
+                                                <img class="container_img_large" th:src="${photos.path}"/>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </table>
+                        <tr>
+
+                        </tr>
+                        </td>
+                        </tr>
+                    </table>
+                    <table class="table table-sm">
+                        <tr>
+                            <td colspan="3" class="table-info"><b style="color: black">FOTO SOP</b></td>
+                        </tr>
                         <table>
                             <tr>
-                                <div class="responsive" th:each="photos : ${photoDokumen}">
+                                <div class="responsive" th:each="photos : ${photoSOP}">
                                     <div class="gallery">
-                                        <div th:text="${photos.key}"></div>
-                                        <img class="container_img_large" th:src="${photos.value}"/>
+                                        <div>
+                                            <b>[[${photos.androidPath}]]</b>
+                                        </div>
+                                        <img class="container_img_large" th:src="${photos.path}"/>
                                     </div>
                                 </div>
                             </tr>
                         </table>
-
-                        <table class="table table-sm">
+                    </table>
+                    <table class="table table-sm" border="1">
+                        <tr>
+                            <td colspan="3" class="table-info"><b style="color: black">FOTO LAINNYA</b></td>
+                        </tr>
+                        <table>
                             <tr>
-                                <td colspan="4" class="table-info"><b style="color: black">FOTO
-                                    KENDARAAN</b></td>
-                            </tr>
-                            <tr>
-                                <td><b>Exterior</b></td>
-                                <td colspan="3">
-                                    <table>
-                                        <tr>
-                                            <div class="responsive" th:each="photos : ${interiorPhoto}">
-                                                <div class="gallery">
-                                                    <div th:text="${photos.key}"></div>
-                                                    <img class="container_img_large" th:src="${photos.value}"/>
-                                                </div>
-                                            </div>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td><b>Interior</b></td>
-                                <td colspan="3">
-                                    <table>
-                                        <tr>
-                                            <div class="responsive" th:each="photos : ${exteriorPhoto}">
-                                                <div class="gallery">
-                                                    <div th:text="${photos.key}"></div>
-                                                    <img class="container_img_large" th:src="${photos.value}"/>
-                                                </div>
-                                            </div>
-                                        </tr>
-                                    </table>
-                            <tr>
-
-                            </tr>
-                            </td>
-                            </tr>
-                        </table>
-
-                        <table class="table table-sm">
-                            <tr>
-                                <td colspan="4" class="table-info"><b style="color: black">FOTO LAINNYA</b></td>
-                            </tr>
-                            <table>
-                                <tr>
-                                    <div class="responsive" th:each="photos : ${lainnyaPhoto}">
-                                        <div class="gallery">
-                                            <div th:text="${photos.key}"></div>
-                                            <img class="container_img_large" th:src="${photos.value}"/>
+                                <div class="responsive" th:each="photos : ${lainnyaPhoto}">
+                                    <div class="gallery">
+                                        <div>
+                                            <b>[[${photos.androidPath}]] : </b></br> [[${photos.caption}]]
                                         </div>
+                                        <img class="container_img_large" th:src="${photos.path}"/>
                                     </div>
-                                </tr>
-                            </table>
+                                </div>
+                            </tr>
                         </table>
-
-
-                        <td colspan="4" style="vertical-align: middle;"><p class="no-margin-bottom">
-                            Catatan : *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi
-                            Kita.
-                            Dengan
-                            menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
-                            setuju
-                            dengan Syarat dan Ketentuan yang berlaku.
-                            *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
-                            inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap.
-                            Dan
-                            sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka apabila
-                            ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal inspeksi,
-                            maka
-                            hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
-                        </td>
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <!-- End of Main Content -->
 
@@ -1218,17 +1195,25 @@ div.desc {
 <footer class="sticky-footer bg-white">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
+            <div><p class="no-margin-bottom">
+                Catatan : *Laporan inspeksi ini tunduk pada syarat dan ketentuan dari Garasi
+                Kita.
+                Dengan
+                menggunakan laporan inspeksi ini, Anda menyatakan telah membaca, memahami dan
+                setuju
+                dengan Syarat dan Ketentuan yang berlaku.
+                *Hasil laporan inspeksi ini valid berdasarkan kondisi kendaraan yang dicek oleh
+                inspector pada tanggal inspeksi dengan menggunakan alat inspeksi secara lengkap.
+                Dan
+                sehubungan kendaraan yang dicek adalah kendaraan bekas (second), maka apabila
+                ditemukan atau terjadi kerusakan pada kendaraan diluar dari tanggal inspeksi,
+                maka
+                hal tersebut tidak menjadi tanggung jawab Garasi Kita</p>
+            </div>
             <span>Copyright &copy; GKI 2023</span>
         </div>
     </div>
 </footer>
-<!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
@@ -1281,78 +1266,6 @@ div.desc {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
