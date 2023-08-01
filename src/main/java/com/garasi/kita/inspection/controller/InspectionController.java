@@ -133,12 +133,16 @@ public class InspectionController {
         return "inspection_list";
     }
 
+    @Autowired
+    private ExportReportService exportReportService;
+    
     @GetMapping("/downloadInspection2")
     public void downloadReceipt2(HttpServletResponse response, @RequestParam("kode_booking") String kode) throws IOException {
-        ByteArrayInputStream exportedData = exportPdfService.exportReceiptPdf("receipt_dua", dataDetailInspection(kode));
+        exportReportService.newReportDoc(kode);
+      /*  ByteArrayInputStream exportedData = exportPdfService.exportReceiptPdf("receipt_dua", dataDetailInspection(kode));
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=" + kode + ".pdf");
-        IOUtils.copy(exportedData, response.getOutputStream());
+        IOUtils.copy(exportedData, response.getOutputStream());*/
     }
 
 
