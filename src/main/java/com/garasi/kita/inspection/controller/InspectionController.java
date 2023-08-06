@@ -58,6 +58,12 @@ public class InspectionController {
     @Value("${path.file.upload}")
     private String pathName;
 
+    @Value("${path.file.output}")
+    private String pathOutput;
+
+    @Value("${path.file.outputpdf}")
+    private String pathOutputPdf;
+
     @Value("${path.file.url}")
     private String pathUrl;
 
@@ -135,16 +141,26 @@ public class InspectionController {
 
     @Autowired
     private ExportReportService exportReportService;
-    
-    @GetMapping("/downloadInspection2")
-    public void downloadReceipt2(HttpServletResponse response, @RequestParam("kode_booking") String kode) throws IOException {
-        exportReportService.newReportDoc(kode);
-      /*  ByteArrayInputStream exportedData = exportPdfService.exportReceiptPdf("receipt_dua", dataDetailInspection(kode));
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=" + kode + ".pdf");
-        IOUtils.copy(exportedData, response.getOutputStream());*/
-    }
 
+    @GetMapping("/downloadInspection2")
+    public ResponseEntity<ByteArrayResource> downloadFile(HttpServletResponse response, @RequestParam("kode_booking") String kode, @RequestParam("type") String type) throws IOException {
+        String path = pathOutput;
+        if (type.equalsIgnoreCase("pdf")) {
+            path = pathOutputPdf;
+        }
+        File file = new File(path + "/" + kode + "." + type);
+        byte[] data = Files.readAllBytes(file.toPath());
+        ByteArrayResource resource = new ByteArrayResource(data);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getName());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(data.length)
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
+    }
 
     @GetMapping("/detailInspection")
     public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {

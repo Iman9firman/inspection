@@ -4,6 +4,7 @@ import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.Inspection;
 import com.garasi.kita.inspection.model.InspectionDetail;
 import com.garasi.kita.inspection.model.PhotoItem;
+import com.garasi.kita.inspection.service.ExportReportService;
 import com.garasi.kita.inspection.service.InpectionDetailService;
 import com.garasi.kita.inspection.service.PhotoItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class AndroidController {
 
     @Autowired
     PhotoItemService photoItemService;
+
+    @Autowired
+    ExportReportService exportReportService;
 
     @Value("${path.file.upload}")
     private String pathName;
@@ -83,25 +87,30 @@ public class AndroidController {
     public ResponseEntity<Object> saveInspectionDetail(@RequestBody Map<String, List<InspectionDetail>> inspectionDetail,
                                                        HttpServletRequest request) {
         // update status inspection menjadi 2
-        boolean finish = false;
+
 
         for (InspectionDetail inspectionDetail1 : inspectionDetail.get("inspectionDetail")) {
-            dao.updateInspection(inspectionDetail1.getKodeBooking());
+            dao.updateInspection(inspectionDetail1.getKodeBooking(), 1);
+
             int update = dao.update(inspectionDetail1);
             if (update == 0) {
                 inpectionDetailService.saveData(inspectionDetail1);
             }
-            if (inspectionDetail1.getIdField().startsWith("1800")) {
-                finish = true;
-            }
+
         }
         HashMap<String, String> result = new HashMap<>();
+        result.put("status", "next");
+        return ResponseEntity.ok().body(result);
+    }
 
-        if (finish) {
-            result.put("status", "success");
-        } else {
-            result.put("status", "next");
-        }
+    @PostMapping("/lastPage")
+    public ResponseEntity<Object> lastPage(@RequestParam("kode") String kode, HttpServletRequest request) {
+
+        exportReportService.newReportDoc(kode);
+        dao.updateInspection(kode, 3);
+
+        HashMap<String, String> result = new HashMap<>();
+        result.put("status", "success >> "+kode);
         return ResponseEntity.ok().body(result);
     }
 

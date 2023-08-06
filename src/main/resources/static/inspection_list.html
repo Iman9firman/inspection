@@ -112,14 +112,25 @@
                                         <span th:if="${result.status == 1}" class="badge badge-pill badge-warning">On Progress</span>
                                         <span th:if="${result.status == 2}"
                                               class="badge badge-pill badge-success">Done</span>
+                                        <span th:if="${result.status == 3}" class="badge badge-pill badge-success">convert docx</span>
+                                        <span th:if="${result.status == 4}" class="badge badge-pill badge-success">Report doc ready</span>
+                                        <span th:if="${result.status == 5}" class="badge badge-pill badge-success">convert docx</span>
+                                        <span th:if="${result.status == 6}"
+                                              class="badge badge-pill badge-success">Done.</span>
+                                        <span th:if="${result.status == 9}" class="badge badge-pill badge-success">file error</span>
                                     </td>
                                     <td>
-                                        <a th:if="${result.status == 2}"
-                                           th:href="@{${'/detailInspection?kode_booking='+result.kodeBooking}}"
+                                        <a th:href="@{${'/detailInspection?kode_booking='+result.kodeBooking}}"
                                            class="btn btn-outline-success">Detail</a>
-                                        <a th:if="${result.status == 2}"
-                                           th:href="@{${'/downloadInspection2?kode_booking='+result.kodeBooking}}"
-                                           class="btn btn-outline-success">Print</a>
+                                        <a th:if="${result.status == 4}"
+                                           th:href="@{${'/downloadInspection2?kode_booking='+result.kodeBooking+'&type=docx'}}"
+                                           class="btn btn-outline-success">Doc</a>
+                                        <a th:if="${result.status == 6}"
+                                           th:href="@{${'/downloadInspection2?kode_booking='+result.kodeBooking+'&type=pdf'}}"
+                                           class="btn btn-outline-success">Pdf</a>
+                                        <a th:if="${result.status == 6}"
+                                           th:href="@{${'/downloadInspection2?kode_booking='+result.kodeBooking+'&type=docx'}}"
+                                           class="btn btn-outline-success">Doc</a>
                                     </td>
                                 </tr>
                                 </tbody>

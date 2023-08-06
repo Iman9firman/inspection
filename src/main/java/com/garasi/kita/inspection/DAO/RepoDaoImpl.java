@@ -31,7 +31,7 @@ public class RepoDaoImpl implements RepoDao {
     @Override
     public List<Inspection> listTask(String username) {
         List<Inspection> inspectionList = new ArrayList<>();
-        String query = "SELECT * FROM `inspection` WHERE `inspektor` LIKE '%" + username + "%';";
+        String query = "SELECT * FROM `inspection` WHERE `inspektor` LIKE '%" + username + "%' where status in (0,1);";
         try {
             inspectionList = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(Inspection.class));
             return inspectionList;
@@ -91,8 +91,22 @@ public class RepoDaoImpl implements RepoDao {
     }
 
     @Override
-    public int updateInspection(String kodeBooking) {
-        String query = "UPDATE inspection set status= 2 WHERE kode_booking = '" + kodeBooking + "' ";
+    public int updateInspection(String kodeBooking, int status) {
+        String query = "UPDATE inspection set status= " + status + " WHERE kode_booking = '" + kodeBooking + "' ";
         return jdbcTemplate.update(query);
     }
+
+    @Override
+    public List<String> getGenerateReport() {
+        List<String> kodeBooking = new ArrayList<>();
+        String query = "SELECT concat(`kode_booking`, ';',`status`) as code_booking FROM `inspection` WHERE `status` IN (2,4) LIMIT 10;";
+        try {
+            kodeBooking = jdbcTemplate.queryForList(query, String.class);
+            return kodeBooking;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error get task ", e);
+        }
+        return kodeBooking;
+    }
+
 }

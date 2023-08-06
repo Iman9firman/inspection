@@ -3,6 +3,7 @@ package com.garasi.kita.inspection.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.*;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.Units;
@@ -15,14 +16,18 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.List;
+
+import static org.xhtmlrenderer.test.DocumentDiffTest.height;
 
 @Service
 public class ExportReportService {
@@ -33,6 +38,15 @@ public class ExportReportService {
 
     @Value("${path.file.upload}")
     private String pathName;
+
+    @Value("${path.file.template}")
+    private String pathTemplate;
+
+    @Value("${path.file.output}")
+    private String pathOutput;
+
+    @Value("${path.file.img}")
+    private String pathImg;
 
 
     public void newReportDoc(String kode) {
@@ -309,27 +323,35 @@ public class ExportReportService {
 
         model.put("notes", notes);
 
-        try (FileInputStream fileInputStream = new FileInputStream(new ClassPathResource("final_reportGKI.docx").getFile())) {
+        File file = new File(pathTemplate + "/" + "final_reportGKI.docx");
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
 
             XWPFDocument doc = new XWPFDocument(fileInputStream);
 
             for (XWPFTable tables : doc.getTables()) {
                 search(tables, model);
             }
-
-            try (FileOutputStream outputStream = new FileOutputStream(pathName + "/Documents/" + kode + "-" + new Date().getTime() + ".docx")) {
+            //try (FileOutputStream outputStream = new FileOutputStream("C:/Users/dartmedia/OneDrive/Documents/LLoutput_file-" + new Date().getTime() + ".docx")) {
+            try (FileOutputStream outputStream = new FileOutputStream(pathTemplate + "/" + kode + ".docx")) {
                 doc.write(outputStream);
-
-
+                dao.updateInspection(kode, 4);
             } catch (IOException e) {
                 e.printStackTrace();
+                dao.updateInspection(kode, 9);
                 // Handle errors that occur during file read/write
             }
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
+            dao.updateInspection(kode, 9);
             e.printStackTrace();
-        } catch (Exception e) {
+
+        } catch (
+                Exception e) {
+            dao.updateInspection(kode, 9);
             e.printStackTrace();
         }
+
     }
 
     private void search(XWPFTable table, HashMap<String, Object> model) throws Exception {
@@ -389,7 +411,17 @@ public class ExportReportService {
                                 XWPFParagraph paragraph = cell.addParagraph();
 
                                 List<XWPFRun> runs = paragraph.getRuns();
-                                String[] lines = listnote.get(llas1).getCaption().split("\n");
+                                String textCaption = listnote.get(llas1).getCaption();
+                                if (table.getText().contains("${photoDokumen}") || table.getText().contains("${interiorPhoto}") || table.getText().contains("${exteriorPhoto}") || table.getText().contains("${photoSOP}")) {
+                                    textCaption = listnote.get(llas1).getAndroidPath();
+                                } else if (table.getText().contains("${lainnyaPhoto}")) {
+                                    textCaption = listnote.get(llas1).getAndroidPath() + " : " + listnote.get(llas1).getCaption();
+                                }
+
+                                String[] lines = "-".split("\n");
+                                if (textCaption != null) {
+                                    lines = textCaption.split("\n");
+                                }
 
                                 int pos = 0;
                                 for (String line : lines) {
@@ -401,6 +433,7 @@ public class ExportReportService {
                                         }
                                     } else {
                                         run = paragraph.createRun();
+                                        run.addBreak();
                                     }
 
                                     run.setText(line, pos);
@@ -423,9 +456,7 @@ public class ExportReportService {
 
                                 File file = new File(listnote.get(llas2).getPath());
                                 if (file.exists()) {
-                                    FileInputStream imageStream = new FileInputStream(file);
-                                    run.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(125), Units.toEMU(125));
-                                    imageStream.close();
+                                    addPicture(run, file);
                                 }
 
                                 llas2++;
@@ -453,6 +484,87 @@ public class ExportReportService {
         }
 
 
+    }
+
+
+    private void addPicture(XWPFRun run, File file) throws IOException, InvalidFormatException {
+
+      /*  FileInputStream imageStream = new FileInputStream(file);
+
+        BufferedImage image = ImageIO.read(imageStream);
+        int defaultWidthInPixels = image.getWidth();
+        int defaultHeightInPixels = image.getHeight();
+
+        System.out.println("Default Image Width1 : " + defaultWidthInPixels);
+        System.out.println("Default Image Height1 : " + defaultHeightInPixels);
+
+        if (defaultWidthInPixels < defaultHeightInPixels) {
+            Graphics2D g2d = image.createGraphics();
+            AffineTransform at = new AffineTransform();
+            at.translate(defaultHeightInPixels, 0);
+            at.rotate(Math.toRadians(90));
+            g2d.setTransform(at);
+            g2d.drawImage(image, 0, 0, null);
+            g2d.dispose();
+        }
+
+        defaultWidthInPixels = image.getWidth();
+        defaultHeightInPixels = image.getHeight();
+
+
+        System.out.println("Default Image Width2 : " + defaultWidthInPixels);
+        System.out.println("Default Image Height2 : " + defaultHeightInPixels);
+
+        double defaultWidthInPoints = Units.pixelToPoints(defaultWidthInPixels);
+        double defaultHeightInPoints = Units.pixelToPoints(defaultHeightInPixels);
+
+        run.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(135), Units.toEMU(76));
+        imageStream.close();
+        */
+
+        FileInputStream imageStream2 = new FileInputStream(file);
+
+        BufferedImage image = ImageIO.read(imageStream2);
+        int defaultWidthInPixels = image.getWidth();
+        int defaultHeightInPixels = image.getHeight();
+        float finalWidthA = 140;
+        double percent = finalWidthA / defaultWidthInPixels;
+
+        if (defaultHeightInPixels > defaultWidthInPixels) {
+            defaultWidthInPixels = image.getHeight();
+            defaultHeightInPixels = image.getWidth();
+            percent = finalWidthA / defaultWidthInPixels;
+
+            run.addPicture(rotateImage90Degrees(image), Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(defaultWidthInPixels * percent), Units.toEMU(defaultHeightInPixels * percent));
+            imageStream2.close();
+        } else {
+            FileInputStream imageStream = new FileInputStream(file);
+            run.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(defaultWidthInPixels * percent), Units.toEMU(defaultHeightInPixels * percent));
+            imageStream.close();
+            imageStream2.close();
+        }
+
+
+    }
+
+    public static FileInputStream rotateImage90Degrees(BufferedImage originalImage) throws IOException {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
+
+        Graphics2D g2d = rotatedImage.createGraphics();
+        AffineTransform at = new AffineTransform();
+        at.translate(height, 0);
+        at.rotate(Math.toRadians(90));
+        g2d.setTransform(at);
+        g2d.drawImage(originalImage, 0, 0, null);
+        g2d.dispose();
+
+        File tempFile = File.createTempFile("temp-image", "." + ".jpg");
+        ImageIO.write(rotatedImage, "jpg", tempFile);
+
+        return new FileInputStream(tempFile);
     }
 
     private void searchChild(List<XWPFTable> tables, HashMap<String, Object> model) throws Exception {
@@ -500,23 +612,21 @@ public class ExportReportService {
                 }
             } else if (value instanceof String) {
                 if (text.contains("${photoCover}")) {
-                    File file = new File((String) value);
+                    File file = new File(String.valueOf(value));
+                    System.out.println(value);
                     if (file.exists()) {
                         List<XWPFRun> runs = p.getRuns();
                         for (XWPFRun r : runs) {
                             r.setText("", 0);
-                            FileInputStream imageStream = new FileInputStream(new ClassPathResource(value + ".png").getFile());
-                            r.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(100), Units.toEMU(100));
-                            imageStream.close();
+                            addPicture(r, file);
                         }
                     }
                 } else if (text.contains("${banjir}") || text.contains("${tabrakan}")) {
                     List<XWPFRun> runs = p.getRuns();
                     for (XWPFRun r : runs) {
                         r.setText("", 0);
-                        FileInputStream imageStream = new FileInputStream(new ClassPathResource(value + ".png").getFile());
-                        r.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(100), Units.toEMU(100));
-                        imageStream.close();
+                        File file = new File(pathImg + "/" + value + ".png");
+                        addPicture(r, file);
                     }
                 } else {
                     text = String.valueOf(value);
@@ -533,9 +643,8 @@ public class ExportReportService {
                 List<XWPFRun> runs = p.getRuns();
                 for (XWPFRun r : runs) {
                     r.setText("", 0);
-                    FileInputStream imageStream = new FileInputStream(new ClassPathResource("logo.png").getFile());
-                    r.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(100), Units.toEMU(100));
-                    imageStream.close();
+                    File file = new File(pathImg + "/" + (String) value);
+                    addPicture(r, file);
                 }
 
             } else {

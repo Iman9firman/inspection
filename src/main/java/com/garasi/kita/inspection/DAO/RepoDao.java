@@ -21,5 +21,9 @@ public interface RepoDao {
     void removePhoto(String name);
 
     int update(InspectionDetail data);
-    int updateInspection(String data);
+
+    int updateInspection(String data, int status);
+
+    List<String> getGenerateReport();
 }
+

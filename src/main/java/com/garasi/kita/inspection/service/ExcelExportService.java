@@ -86,8 +86,6 @@ public class ExcelExportService {
             // Find the last used row index
             int lastUsedRowIndex = sheet.getLastRowNum();
 
-            System.out.println("Masih : " + lastUsedRowIndex);
-
             // Create a new row at the end and increment the index
             Row newRow = sheet.createRow(lastUsedRowIndex + 1);
 
@@ -125,16 +123,10 @@ public class ExcelExportService {
                 workbook.write(outputStream);
             }
 
-
-            System.out.println("udah : " + sheet.getLastRowNum());
-            System.out.println("kemana : " + drawing.getSheet().getActiveCell());
-            System.out.println("kemanaLulu : " + mergedRegion.getLastRow());
-
             int lastColumn = anchor.getCol1() + anchor.getDx1();
             int lastRow = anchor.getRow1() + anchor.getDy1();
 
             // Print the last position (for demonstration purposes)
-            System.out.println("Last Position: Row=" + lastRow + ", Column=" + lastColumn);
 
             Row newRow2 = sheet.createRow(lastRow);
 
