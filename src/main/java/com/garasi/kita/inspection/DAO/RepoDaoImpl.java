@@ -31,7 +31,20 @@ public class RepoDaoImpl implements RepoDao {
     @Override
     public List<Inspection> listTask(String username) {
         List<Inspection> inspectionList = new ArrayList<>();
-        String query = "SELECT * FROM `inspection` WHERE `inspektor` LIKE '%" + username + "%' where status in (0,1);";
+        String query = "SELECT * FROM `inspection` WHERE `inspektor` LIKE '%" + username + "%' and status in (0,1);";
+        try {
+            inspectionList = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(Inspection.class));
+            return inspectionList;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error get task ", e);
+        }
+        return inspectionList;
+    }
+
+    @Override
+    public List<Inspection> listHistoryTask(String username, String startdate, String endDate) {
+        List<Inspection> inspectionList = new ArrayList<>();
+        String query = "select *  from inspection  WHERE `inspektor` LIKE '%" + username + "%' and status > 1 and create_date >= '2023-06-25' and create_date  <= '2023-07-28' order by create_date ;;";
         try {
             inspectionList = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(Inspection.class));
             return inspectionList;
@@ -69,6 +82,19 @@ public class RepoDaoImpl implements RepoDao {
     public List<PhotoItem> getDataInspectionDetailPhoto(String kodeBooking, String idField) {
         List<PhotoItem> photo = new ArrayList<>();
         String query = "SELECT * FROM `photo_item` WHERE `kode_booking` = '" + kodeBooking + "' AND `id_field` = '" + idField + "'";
+        try {
+            photo = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(PhotoItem.class));
+            return photo;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error get task ", e);
+        }
+        return photo;
+    }
+
+    @Override
+    public List<PhotoItem> getDataInspectionDetailPhoto(String kodeBooking) {
+        List<PhotoItem> photo = new ArrayList<>();
+        String query = "SELECT * FROM `photo_item` WHERE `kode_booking` = '" + kodeBooking + "'";
         try {
             photo = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(PhotoItem.class));
             return photo;

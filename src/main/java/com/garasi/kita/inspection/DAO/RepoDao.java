@@ -18,6 +18,8 @@ public interface RepoDao {
 
     List<PhotoItem> getDataInspectionDetailPhoto(String kodeBooking, String idField);
 
+    List<PhotoItem> getDataInspectionDetailPhoto(String kodeBooking);
+
     void removePhoto(String name);
 
     int update(InspectionDetail data);
@@ -25,5 +27,7 @@ public interface RepoDao {
     int updateInspection(String data, int status);
 
     List<String> getGenerateReport();
+
+    List<Inspection> listHistoryTask(String username, String startdate, String endDate);
 }
 

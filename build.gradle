@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.garasi.kita'
-version = '0.0.36-FINAL'
+version = '0.0.37-FINAL'
 sourceCompatibility = '11'
 
 repositories {
