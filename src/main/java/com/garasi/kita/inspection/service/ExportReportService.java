@@ -10,6 +10,8 @@ import org.apache.poi.util.Units;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -48,6 +50,7 @@ public class ExportReportService {
     @Value("${path.file.img}")
     private String pathImg;
 
+    Logger logger = LoggerFactory.getLogger(ExportReportService.class);
 
     public void newReportDoc(String kode) {
 
@@ -332,23 +335,26 @@ public class ExportReportService {
             for (XWPFTable tables : doc.getTables()) {
                 search(tables, model);
             }
-            //try (FileOutputStream outputStream = new FileOutputStream("C:/Users/dartmedia/OneDrive/Documents/LLoutput_file-" + new Date().getTime() + ".docx")) {
+
             try (FileOutputStream outputStream = new FileOutputStream(pathTemplate + "/" + kode + ".docx")) {
+                logger.info("Sukses DOC >> "+kode);
                 doc.write(outputStream);
                 dao.updateInspection(kode, 4);
             } catch (IOException e) {
                 e.printStackTrace();
+                logger.error("gagal 1 DOC >> "+kode+": "+e.getMessage());
                 dao.updateInspection(kode, 9);
-                // Handle errors that occur during file read/write
             }
         } catch (
                 IOException e) {
+            logger.error("gagal 2 DOC >> "+kode+": "+e.getMessage());
             dao.updateInspection(kode, 9);
             e.printStackTrace();
 
         } catch (
                 Exception e) {
             dao.updateInspection(kode, 9);
+            logger.error("gagal 3 DOC >> "+kode+": "+e.getMessage());
             e.printStackTrace();
         }
 
@@ -488,40 +494,6 @@ public class ExportReportService {
 
 
     private void addPicture(XWPFRun run, File file) throws IOException, InvalidFormatException {
-
-      /*  FileInputStream imageStream = new FileInputStream(file);
-
-        BufferedImage image = ImageIO.read(imageStream);
-        int defaultWidthInPixels = image.getWidth();
-        int defaultHeightInPixels = image.getHeight();
-
-        System.out.println("Default Image Width1 : " + defaultWidthInPixels);
-        System.out.println("Default Image Height1 : " + defaultHeightInPixels);
-
-        if (defaultWidthInPixels < defaultHeightInPixels) {
-            Graphics2D g2d = image.createGraphics();
-            AffineTransform at = new AffineTransform();
-            at.translate(defaultHeightInPixels, 0);
-            at.rotate(Math.toRadians(90));
-            g2d.setTransform(at);
-            g2d.drawImage(image, 0, 0, null);
-            g2d.dispose();
-        }
-
-        defaultWidthInPixels = image.getWidth();
-        defaultHeightInPixels = image.getHeight();
-
-
-        System.out.println("Default Image Width2 : " + defaultWidthInPixels);
-        System.out.println("Default Image Height2 : " + defaultHeightInPixels);
-
-        double defaultWidthInPoints = Units.pixelToPoints(defaultWidthInPixels);
-        double defaultHeightInPoints = Units.pixelToPoints(defaultHeightInPixels);
-
-        run.addPicture(imageStream, Document.PICTURE_TYPE_JPEG, "image.jpg", Units.toEMU(135), Units.toEMU(76));
-        imageStream.close();
-        */
-
         FileInputStream imageStream2 = new FileInputStream(file);
 
         BufferedImage image = ImageIO.read(imageStream2);
@@ -613,7 +585,6 @@ public class ExportReportService {
             } else if (value instanceof String) {
                 if (text.contains("${photoCover}")) {
                     File file = new File(String.valueOf(value));
-                    System.out.println(value);
                     if (file.exists()) {
                         List<XWPFRun> runs = p.getRuns();
                         for (XWPFRun r : runs) {

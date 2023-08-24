@@ -22,9 +22,13 @@ public interface RepoDao {
 
     void removePhoto(String name);
 
+    void updateCaption(String name, String caption);
+
     int update(InspectionDetail data);
 
     int updateInspection(String data, int status);
+
+    int taskDone(String username);
 
     List<String> getGenerateReport();
 

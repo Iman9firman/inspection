@@ -9,7 +9,13 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -44,7 +50,7 @@ public class RepoDaoImpl implements RepoDao {
     @Override
     public List<Inspection> listHistoryTask(String username, String startdate, String endDate) {
         List<Inspection> inspectionList = new ArrayList<>();
-        String query = "select *  from inspection  WHERE `inspektor` LIKE '%" + username + "%' and status > 1 and create_date >= '2023-06-25' and create_date  <= '2023-07-28' order by create_date ;;";
+        String query = "select *  from inspection  WHERE `inspektor` LIKE '%" + username + "%' and status > 1 and create_date >= '" + startdate + "' and create_date  <= '" + endDate + "' order by create_date ;;";
         try {
             inspectionList = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(Inspection.class));
             return inspectionList;
@@ -111,6 +117,12 @@ public class RepoDaoImpl implements RepoDao {
     }
 
     @Override
+    public void updateCaption(String name, String desc) {
+        String query = "UPDATE `photo_item` set `caption` = '" + desc + "' WHERE `path` = '" + name + "'";
+        jdbcTemplate.update(query);
+    }
+
+    @Override
     public int update(InspectionDetail data) {
         String query = "UPDATE inspection_detail set value='" + data.getValue() + "' WHERE kode_booking = '" + data.getKodeBooking() + "' and id_field = '" + data.getIdField() + "'";
         return jdbcTemplate.update(query);
@@ -118,8 +130,23 @@ public class RepoDaoImpl implements RepoDao {
 
     @Override
     public int updateInspection(String kodeBooking, int status) {
-        String query = "UPDATE inspection set status= " + status + " WHERE kode_booking = '" + kodeBooking + "' ";
+        String query = "UPDATE inspection set status= " + status + " ,update_date = now() WHERE kode_booking = '" + kodeBooking + "' ";
         return jdbcTemplate.update(query);
+    }
+
+    @Override
+    public int taskDone(String username) {
+        try {
+            LocalDateTime ld = LocalDateTime.now();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+            String date = ld.format(dtf);
+            String query = "SELECT COUNT(`status`) FROM `inspection` WHERE  `inspektor` like '%" + username + "%'  AND `update_date` > '" + date + "' AND `status` >= 2 ;";
+            return jdbcTemplate.queryForObject(query, Integer.class);
+        } catch (Exception e) {
+            return 0;
+        }
+
+
     }
 
     @Override

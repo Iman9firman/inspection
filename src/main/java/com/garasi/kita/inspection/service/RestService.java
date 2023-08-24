@@ -1,6 +1,8 @@
 package com.garasi.kita.inspection.service;
 
 import com.garasi.kita.inspection.DAO.RepoDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -34,34 +36,31 @@ public class RestService {
 
     @Value("${path.file.outputpdf}")
     private String pathOutput;
+    Logger logger = LoggerFactory.getLogger(RestService.class);
 
     public void generatePdf(String kodeBooking) {
         try {
             String url = urlConvert;
 
-            // create a map for post parameters
             Map<String, Object> map = new HashMap<>();
             map.put("source", pathName + "/" + kodeBooking + ".docx");
             map.put("target", pathOutput);
             map.put("fileName", kodeBooking);
 
-            System.out.println("dox to pdf>1>" + pathName + kodeBooking + ".docx");
-            System.out.println("dox to pdf>2>" + pathOutput);
-            System.out.println("dox to pdf>3>" + kodeBooking);
-            // build the request
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map);
-
-            // send POST request
+            
             ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
 
             // check response status code
             if (response.getStatusCode() == HttpStatus.OK) {
+                logger.info("suskes pdf " + kodeBooking);
                 dao.updateInspection(kodeBooking, 6);
             } else {
+                logger.error("gagal pdf " + kodeBooking);
                 dao.updateInspection(kodeBooking, 9);
             }
         } catch (HttpStatusCodeException ex) {
-            System.out.println(ex.getMessage());
+            logger.error("gagal pdf " + ex.getMessage() + "<<" + kodeBooking);
             dao.updateInspection(kodeBooking, 9);
         }
 

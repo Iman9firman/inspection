@@ -73,9 +73,11 @@ public class AndroidController {
     @PostMapping("/getTask")
     public ResponseEntity<Object> getListTask(@RequestParam String name,
                                               HttpServletRequest request) {
-        HashMap<String, List<Inspection>> result = new HashMap<>();
+        HashMap<String, Object> result = new HashMap<>();
         List<Inspection> listTask = dao.listTask(name);
         result.put("data", listTask);
+        result.put("done", dao.taskDone(name));
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -128,12 +130,10 @@ public class AndroidController {
 
     @PostMapping("/lastPage")
     public ResponseEntity<Object> lastPage(@RequestParam("kode") String kode, HttpServletRequest request) {
-
-        exportReportService.newReportDoc(kode);
         dao.updateInspection(kode, 3);
-
+        exportReportService.newReportDoc(kode);
         HashMap<String, String> result = new HashMap<>();
-        result.put("status", "success >> " + kode);
+        result.put("status", "success");
         return ResponseEntity.ok().body(result);
     }
 
@@ -141,6 +141,15 @@ public class AndroidController {
     public ResponseEntity<Object> deleteFile(@RequestParam String name,
                                              HttpServletRequest request) {
         dao.removePhoto(name);
+        HashMap<String, String> result = new HashMap<>();
+        result.put("status", "success");
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/update/{kode_booking}/{id_field}")
+    public ResponseEntity<Object> update(@RequestParam String name, @RequestParam String desc,
+                                         HttpServletRequest request) {
+        dao.updateCaption(name, desc);
         HashMap<String, String> result = new HashMap<>();
         result.put("status", "success");
         return ResponseEntity.ok().body(result);

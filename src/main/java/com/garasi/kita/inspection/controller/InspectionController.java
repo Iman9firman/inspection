@@ -73,7 +73,7 @@ public class InspectionController {
     @Autowired
     private ExportPdfService exportPdfService;
 
-    @GetMapping("/")
+    @GetMapping(value = {"/", "/index"})
     public String homePage(Model model) {
         List<City> city = inpectionService.getCity();
         List<Inspector> inspectors = inpectionService.getInspector();
@@ -480,6 +480,11 @@ public class InspectionController {
 
     private HashMap<String, Object> dataDetailInspection(String kode) {
         return null;
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
     }
 
 

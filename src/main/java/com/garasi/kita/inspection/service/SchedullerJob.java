@@ -1,6 +1,8 @@
 package com.garasi.kita.inspection.service;
 
 import com.garasi.kita.inspection.DAO.RepoDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
@@ -31,15 +33,18 @@ public class SchedullerJob {
 
     @Scheduled(cron = "*/5 * * * * *")
     public void resetMessageMtRegist() {
+        Logger logger = LoggerFactory.getLogger(SchedullerJob.class);
         try {
             List<String> kodebooking = dao.getGenerateReport();
             for (String kb : kodebooking) {
                 switch (kb.split(";")[1]) {
                     case "2":
+                        logger.info("convertDoc >>" + kb.split(";")[0]);
                         dao.updateInspection(kb.split(";")[0], 3);
                         exportReportService.newReportDoc(kb.split(";")[0]);
                         break;
                     case "4":
+                        logger.info("convertPdf >>" + kb.split(";")[0]);
                         System.out.println("dox to pdf");
                         dao.updateInspection(kb.split(";")[0], 5);
                         restService.generatePdf(kb.split(";")[0]);
@@ -47,6 +52,7 @@ public class SchedullerJob {
                 }
             }
         } catch (Exception e) {
+            logger.error(e.getMessage());
         }
     }
 
