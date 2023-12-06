@@ -135,6 +135,13 @@ public class RepoDaoImpl implements RepoDao {
     }
 
     @Override
+    public int updateInspectionV2(String kodeBooking, int status) {
+        String query = "UPDATE inspection set status= " + status + " ,update_date = now() , version = 2  WHERE kode_booking = '" + kodeBooking + "' ";
+        return jdbcTemplate.update(query);
+
+    }
+
+    @Override
     public int taskDone(String username) {
         try {
             LocalDateTime ld = LocalDateTime.now();
@@ -152,7 +159,7 @@ public class RepoDaoImpl implements RepoDao {
     @Override
     public List<String> getGenerateReport() {
         List<String> kodeBooking = new ArrayList<>();
-        String query = "SELECT concat(`kode_booking`, ';',`status`) as code_booking FROM `inspection` WHERE `status` IN (2,4) LIMIT 10;";
+        String query = "SELECT concat(`kode_booking`, ';',`status`,';',`version`) as code_booking FROM `inspection` WHERE `status` IN (2,4) LIMIT 10;";
         try {
             kodeBooking = jdbcTemplate.queryForList(query, String.class);
             return kodeBooking;

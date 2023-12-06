@@ -58,7 +58,7 @@ class InspectionApplicationTests {
         //excelExportService.createExcelWithAutoAdjustHeight();
         //excelExportService.createExcelWithAutoSizedRows();
 
-        exportReportService.newReportDoc("D1508EAJ-20230712070756");
+        exportReportService.newReportDocV2("B2616ZKW-20230806024608");
         //excelExportService.createGridImage();
     }
 

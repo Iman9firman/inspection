@@ -41,7 +41,11 @@ public class SchedullerJob {
                     case "2":
                         logger.info("convertDoc >>" + kb.split(";")[0]);
                         dao.updateInspection(kb.split(";")[0], 3);
-                        exportReportService.newReportDoc(kb.split(";")[0]);
+                        if (kb.split(";")[2] == "2") {
+                            exportReportService.newReportDocV2(kb.split(";")[0]);
+                        } else {
+                            exportReportService.newReportDoc(kb.split(";")[0]);
+                        }
                         break;
                     case "4":
                         logger.info("convertPdf >>" + kb.split(";")[0]);

@@ -52,6 +52,323 @@ public class ExportReportService {
 
     Logger logger = LoggerFactory.getLogger(ExportReportService.class);
 
+    public void newReportDocV2(String kode) {
+
+        HashMap<String, Object> model = new HashMap<>();
+
+        HashMap<Integer, String> noteInspection = new HashMap<>();
+        String label[] = {"Data Konsumen", "Data lengkap kendaraan", "Dokumen kendaraan", "Foto Dokumen", "Foto Wajib Interior", "Foto Wajib Exterior", "Bagian Depan", "Oli dan cairan", "Sisi kiri", "Under Body", "Belakang", "Sisi atas", "Sisi kanan", "Fungsi elektrikal", "Interior", "Test drive", "Kelengkapan", "General summary"};
+
+
+        Inspection inspection = dao.getDataInspection(kode);
+        HashMap<Integer, List<InspectionDetailPhoto>> stringListHashMap = new HashMap<>();
+
+        HashMap<String, InspectionDetail> hashMap = new HashMap<>();
+        String bebasBanjir = "banjir_no";
+        String tabrakan = "tabrakan_no";
+
+        String perawatan = "-";
+        String perbaikan = "-";
+        String kesimpulan = "-";
+
+        //note
+
+        LinkedHashMap<String, List<String>> notes = new LinkedHashMap<>();
+
+        for (InspectionDetail inspectionDetail : dao.getDatainpectionDetailService(kode)) {
+            try {
+
+                ValueModel valueModel = new ObjectMapper().readValue(inspectionDetail.getValue().replaceAll("(\r\n|\n)", "</br>"),
+                        ValueModel.class);
+                String commaSeparatedString = "";
+                if (valueModel.getOption() != null) {
+                    if (valueModel.getOption().size() > 0) {
+                        commaSeparatedString = String.join(", ", valueModel.getOption());
+                    }
+
+                    if (valueModel.getValue() != null) {
+                        List<String> listnote = notes.get(HashmapFormV2.grouping(inspectionDetail.getIdField()));
+                        if (listnote == null) {
+                            listnote = new ArrayList<>();
+                        }
+                        listnote.add(inspectionDetail.getLabel() + " : " + valueModel.getValue().replace("</br>", "\n"));
+                        notes.put(HashmapFormV2.grouping(inspectionDetail.getIdField()), listnote);
+                    }
+
+                } else {
+                    if (valueModel.getValue() != null) {
+                        commaSeparatedString = valueModel.getValue() != null ? valueModel.getValue() : " - ";
+                    }
+                }
+
+                if (commaSeparatedString.length() == 0) {
+                    commaSeparatedString = "-";
+                }
+
+                inspectionDetail.setValue(": " + commaSeparatedString.replace("</br>", "\n"));
+
+            } catch (Exception e) {
+                String value = inspectionDetail.getValue().replace("{", "").replace("}", "");
+                if (value.length() == 0) {
+                    value = "-";
+                }
+
+                inspectionDetail.setValue(": " + value);
+            }
+
+            hashMap.put(inspectionDetail.getIdField(), inspectionDetail);
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170001")) {
+                String value = inspectionDetail.getValue().replace(": ", "");
+                if (value.equalsIgnoreCase("YA") || value.equalsIgnoreCase("Bekas banjir")) {
+                    bebasBanjir = "banjir";
+                } else if (value.equalsIgnoreCase("TIDAK") || value.equalsIgnoreCase("Bebas banjir")) {
+                    bebasBanjir = "banjir_no";
+                }
+            }
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170002")) {
+                String value = inspectionDetail.getValue().replace(": ", "");
+                if (value.equalsIgnoreCase("YA") || value.equalsIgnoreCase("Bekas tabrakan")) {
+                    tabrakan = "tabrakan";
+                } else if (value.equalsIgnoreCase("TIDAK") || value.equalsIgnoreCase("Bebas tabrakan")) {
+                    tabrakan = "tabrakan_no";
+                }
+            }
+
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170003")) {
+                perawatan = inspectionDetail.getValue().replace(": ", "");
+            }
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170004")) {
+                perbaikan = inspectionDetail.getValue().replace(": ", "");
+            }
+
+            if (inspectionDetail.getIdField().equalsIgnoreCase("170005")) {
+                kesimpulan = inspectionDetail.getValue().replace(": ", "");
+            }
+
+        }
+
+        model.put("estimasiPerbaikan", perbaikan);
+        model.put("estimasiPerawatan", perawatan);
+        model.put("kesimpulan", kesimpulan);
+
+        model.put("banjir", bebasBanjir);
+        model.put("tabrakan", tabrakan);
+
+        model.put("titleQuestion", label);
+        model.put("inspection", inspection);
+        model.put("inspectionNote", noteInspection);
+        model.put("inspectionDetail", stringListHashMap);
+        model.put("hashMap", hashMap);
+
+
+        ArrayList<String> fdl = new ArrayList<>();
+        fdl.add("BPKB;310001");
+        fdl.add("STNK;310002");
+        fdl.add("Faktur;310003");
+        fdl.add(";310004");
+
+        model.put("photoDokumen", listPhoto(kode, fdl));
+
+
+        ArrayList<String> inl = new ArrayList<>();
+        inl.add("Kilometer(rpm 3000);410001");
+        inl.add("Interior Depan;410002");
+        inl.add("Interior Belakang;410003");
+        inl.add("Dashboard;410004");
+        inl.add("Bagasi Terbuka;410005");
+
+        model.put("interiorPhoto", listPhoto(kode, inl));
+
+        ArrayList<String> exl = new ArrayList<>();
+        exl.add("Tampak Depan;420001");
+        exl.add("Tampak Depan Kanan;420002");
+        exl.add("Tampak Depan Kiri;420003");
+        exl.add("Tampak Atap;420004");
+        exl.add("Tampak Belakang;420005");
+
+        String photoCover = "https://www.allianceplast.com/wp-content/uploads/no-image-1024x1024.png";
+        for (String fd : exl) {
+            for (PhotoItem pp : dao.getDataInspectionDetailPhoto(kode, fd.split(";")[1])) {
+                pp.setPath(pathName + "/" + pp.getPath());
+                if (fd.split(";")[0].equalsIgnoreCase("Tampak Depan")) {
+                    photoCover = pp.getPath();
+                }
+            }
+        }
+        model.put("exteriorPhoto", listPhoto(kode, exl));
+
+
+        model.put("photoCover", photoCover);
+
+        ArrayList<String> llp = new ArrayList<>();
+        llp.add("Kaca;400001");
+        llp.add("Wiper;400001");
+        llp.add("Kap mesin;400001");
+        llp.add("Bumper;400001");
+        llp.add("Lampu depan;400001");
+        llp.add("Bulkheat;400001");
+        llp.add("Radiator;400001");
+        llp.add("Kompesor AC;400001");
+        llp.add("Alternator;400001");
+        llp.add("Dinamo Starter;400001");
+        llp.add("Water pump;400001");
+        llp.add("Belt;400001");
+        llp.add("Pompa powerstering;400001");
+        llp.add("Cover Valfe;400001");
+        llp.add("cylinder head;400001");
+        llp.add("Cover timing;400001");
+        llp.add("Seal crankshaft;400001");
+        llp.add("Carter oli;400001");
+        llp.add("Transmisi;400001");
+        llp.add("Steering rack;400001");
+        llp.add("Engine Mounting;400001");
+        llp.add("Kondisi Aki;400001");
+        llp.add("Kabel;400001");
+        llp.add("Oli mesin;400001");
+        llp.add("Oli transmisi;400001");
+        llp.add("Air radiator;400001");
+        llp.add("Oli power stering;400001");
+        llp.add("Minyak rem;400001");
+        llp.add("Fender kiri;400001");
+        llp.add("Ban depan kiri;400001");
+        llp.add("Velg depan kiri;400001");
+        llp.add("Shockbreaker depan kiri;400001");
+        llp.add("Rem depan kiri;400001");
+        llp.add("Link stabilizer;400001");
+        llp.add("Tieroad;400001");
+        llp.add("Arm;400001");
+        llp.add("Balljoin;400001");
+        llp.add("Driveshaft kiri;400001");
+        llp.add("Spion kiri;400001");
+        llp.add("Pintu depan kiri;400001");
+        llp.add("Pilar A;400001");
+        llp.add("Pilar B;400001");
+        llp.add("Jok depan kiri;400001");
+        llp.add("Seatbelt;400001");
+        llp.add("Listplang;400001");
+        llp.add("Pintu belakang kiri;400001");
+        llp.add("Pilar C;400001");
+        llp.add("Quarter kiri;400001");
+        llp.add("Shockbreaker belakang kiri;400001");
+        llp.add("Rem belakang kiri;400001");
+        llp.add("Ban belakang kiri;400001");
+        llp.add("velg belakang kiri;400001");
+        llp.add("Kaca sisi kiri;400001");
+        llp.add("Chasis;400001");
+        llp.add("Cross member;400001");
+        llp.add("Tangki bahan bakar;400001");
+        llp.add("Gardan;400001");
+        llp.add("Lantai bagasi;400001");
+        llp.add("Knalpot;400001");
+        llp.add("Lampu belakang;400001");
+        llp.add("Pintu bagasi;400001");
+        llp.add("Pilar bagasi;400001");
+        llp.add("Shock bagasi;400001");
+        llp.add("Bumper belakang;400001");
+        llp.add("Sensor mundur;400001");
+        llp.add("Kaca belakang;400001");
+        llp.add("Atap;400001");
+        llp.add("Antena;400001");
+        llp.add("velg belakang kanan;400001");
+        llp.add("Ban belakang kanan;400001");
+        llp.add("Rem belakang kanan;400001");
+        llp.add("Shockbreaker belakang kanan;400001");
+        llp.add("Quarter kanan;400001");
+        llp.add("Pintu belakang kanan;400001");
+        llp.add("Pilar C;400001");
+        llp.add("Listplang;400001");
+        llp.add("Pintu depan kanan;400001");
+        llp.add("Pilar A;400001");
+        llp.add("Pilar B;400001");
+        llp.add("Seatbelt;400001");
+        llp.add("Jok depan kanan;400001");
+        llp.add("Spion kanan;400001");
+        llp.add("Ban depan kanan;400001");
+        llp.add("Velg depan kanan;400001");
+        llp.add("Sockbreaker depan kanan;400001");
+        llp.add("Rem depan kanan;400001");
+        llp.add("Link stabilizer;400001");
+        llp.add("Tieroad;400001");
+        llp.add("Arm;400001");
+        llp.add("Balljoin;400001");
+        llp.add("Driveshaft kanan;400001");
+        llp.add("Fender kanan;400001");
+        llp.add("Kaca sisi kanan;400001");
+        llp.add("Panel indikator;400001");
+        llp.add("Diangnosa OBD scanner;400001");
+        llp.add("Switch lampu;400001");
+        llp.add("Switch wiper;400001");
+        llp.add("Power window;400001");
+        llp.add("Spion elektrik;400001");
+        llp.add("Lampu plafon;400001");
+        llp.add("Instrumen AC;400001");
+        llp.add("Central Lock;400001");
+        llp.add("Steering Switch;400001");
+        llp.add("Fitur Lainnya;400001");
+        llp.add("Doortrim;400001");
+        llp.add("setir;400001");
+        llp.add("Panel Dashboard;400001");
+        llp.add("Laci;400001");
+        llp.add("Sunvisor;400001");
+        llp.add("Spion tengah;400001");
+        llp.add("Plafon;400001");
+        llp.add("Kisi-kisi Ac;400001");
+        llp.add("Fungsi Ac;400001");
+        llp.add("Audio;400001");
+        llp.add("Console Box;400001");
+        llp.add("Tuas Perseneling;400001");
+        llp.add("Rem Tangan;400001");
+        llp.add("Pedal ;400001");
+        llp.add("Karpet Dasar;400001");
+        llp.add("Jok Belakang;400001");
+
+
+        model.put("lainnyaPhoto", listPhoto(kode, llp));
+
+        ArrayList<String> sop = new ArrayList<>();
+        sop.add(";170006");
+        model.put("photoSOP", listPhoto(kode, sop));
+
+        model.put("notes", notes);
+
+        File file = new File(pathTemplate + "/" + "v2_reportGKI.docx");
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+
+            XWPFDocument doc = new XWPFDocument(fileInputStream);
+
+            for (XWPFTable tables : doc.getTables()) {
+                search(tables, model);
+            }
+
+            try (FileOutputStream outputStream = new FileOutputStream(pathTemplate + "/" + kode + ".docx")) {
+                logger.info("Sukses DOC >> " + kode);
+                doc.write(outputStream);
+                dao.updateInspection(kode, 4);
+            } catch (IOException e) {
+                e.printStackTrace();
+                logger.error("gagal 1 DOC >> " + kode + ": " + e.getMessage());
+                dao.updateInspection(kode, 9);
+            }
+        } catch (
+                IOException e) {
+            logger.error("gagal 2 DOC >> " + kode + ": " + e.getMessage());
+            dao.updateInspection(kode, 9);
+            e.printStackTrace();
+
+        } catch (
+                Exception e) {
+            dao.updateInspection(kode, 9);
+            logger.error("gagal 3 DOC >> " + kode + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
     public void newReportDoc(String kode) {
 
         HashMap<String, Object> model = new HashMap<>();
@@ -337,28 +654,29 @@ public class ExportReportService {
             }
 
             try (FileOutputStream outputStream = new FileOutputStream(pathTemplate + "/" + kode + ".docx")) {
-                logger.info("Sukses DOC >> "+kode);
+                logger.info("Sukses DOC >> " + kode);
                 doc.write(outputStream);
                 dao.updateInspection(kode, 4);
             } catch (IOException e) {
                 e.printStackTrace();
-                logger.error("gagal 1 DOC >> "+kode+": "+e.getMessage());
+                logger.error("gagal 1 DOC >> " + kode + ": " + e.getMessage());
                 dao.updateInspection(kode, 9);
             }
         } catch (
                 IOException e) {
-            logger.error("gagal 2 DOC >> "+kode+": "+e.getMessage());
+            logger.error("gagal 2 DOC >> " + kode + ": " + e.getMessage());
             dao.updateInspection(kode, 9);
             e.printStackTrace();
 
         } catch (
                 Exception e) {
             dao.updateInspection(kode, 9);
-            logger.error("gagal 3 DOC >> "+kode+": "+e.getMessage());
+            logger.error("gagal 3 DOC >> " + kode + ": " + e.getMessage());
             e.printStackTrace();
         }
 
     }
+
 
     private void search(XWPFTable table, HashMap<String, Object> model) throws Exception {
         if (table.getText().contains("${photoDokumen}") || table.getText().contains("${interiorPhoto}") || table.getText().contains("${exteriorPhoto}") || table.getText().contains("${lainnyaPhoto}") || table.getText().contains("${photoSOP}")) {

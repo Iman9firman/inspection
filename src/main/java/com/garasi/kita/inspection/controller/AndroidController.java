@@ -137,6 +137,15 @@ public class AndroidController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/lastPageV2")
+    public ResponseEntity<Object> lastPageV2(@RequestParam("kode") String kode, HttpServletRequest request) {
+        dao.updateInspection(kode, 3);
+        exportReportService.newReportDocV2(kode);
+        HashMap<String, String> result = new HashMap<>();
+        result.put("status", "success");
+        return ResponseEntity.ok().body(result);
+    }
+
     @PostMapping("/delete/{kode_booking}/{id_field}")
     public ResponseEntity<Object> deleteFile(@RequestParam String name,
                                              HttpServletRequest request) {

@@ -28,6 +28,8 @@ public interface RepoDao {
 
     int updateInspection(String data, int status);
 
+    int updateInspectionV2(String data, int status);
+
     int taskDone(String username);
 
     List<String> getGenerateReport();
