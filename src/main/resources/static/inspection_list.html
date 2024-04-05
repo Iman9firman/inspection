@@ -131,6 +131,11 @@
                                         <a th:if="${result.status == 6}"
                                            th:href="@{${'/downloadInspection2?kode_booking='+result.kodeBooking+'&type=docx'}}"
                                            class="btn btn-outline-success">Doc</a>
+                                        <a th:if="${result.status == 6}"
+                                           href="#"
+                                           th:attr="data-participant=${result.phoneNumber},data-kode-booking=${result.kodeBooking}, data-status=${result.status}, data-name=${result.customer}, data-nopol=${result.nomorPolisi}, data-car-model=${result.model}, data-car-merk=${result.merk}"
+                                           onclick="getDataFromElement(this)"
+                                           class="btn btn-outline-success">Share</a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -186,6 +191,91 @@
     </div>
 </div>
 
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     id="exampleModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Share Inspection</h5>
+            </div>
+            <div class="modal-body">
+                <div class="jumbotron">
+
+                    <form th:action="@{/inputMessage}" th:object="${message}" method="post"
+                          enctype="multipart/form-data"
+                          class="form">
+                        <div class="form-group">
+                            <label for="nocust">Nomor Customer</label>
+                            <input type="text" class="form-control" id="nocust" th:field="*{participant}" required
+                                   readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="kode_booking" th:field="*{kode_booking}"
+                                   style="display: none;"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="contentMessage" th:field="*{content}"
+                                   style="display: none;" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="url" th:field="*{url}" style="display: none;"
+                                   required>
+                        </div>
+                        <p class="modal-body" id="myModalLabel"></p>
+                        <div class="mt-4">
+                            <input type="submit" value="Kirim" class="btn btn-primary"/>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+                    <p><i>Upload file pdf terbaru, Jika ingin mengganti file pdf yang lama</i></p>
+                    <p class="lead">
+
+                    <form th:action="@{/single-file-upload}" th:object="${message}" method="post"
+                          enctype="multipart/form-data"
+                          class="form">
+                        <div class="form-group">
+                            <label for="nocust">Nomor Customer</label>
+                            <input type="text" class="form-control" id="nocust_up" th:field="*{participant}" required
+                                   style="display: none;"
+                                   readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="kode_booking_up" th:field="*{kode_booking}"
+                                   style="display: none;"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="contentMessage_up" th:field="*{content}"
+                                   style="display: none;" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="url_up" th:field="*{url}" style="display: none;"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="file">Select File:</label>
+                            <input type="file" name="file" id="file" class="form-control-file"/>
+                        </div>
+                        <div class="mt-4">
+                            <input type="submit" value="Kirim" class="btn btn-primary"/>
+                        </div>
+                    </form>
+
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -202,6 +292,51 @@
 
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
+
+
+<script type="text/javascript">
+
+    function getDataFromElement(element) {
+        var participant = element.getAttribute('data-participant');
+        var kodeBooking = element.getAttribute('data-kode-booking');
+        var status = element.getAttribute('data-status');
+        var name = element.getAttribute('data-name');
+        var carModel = element.getAttribute('data-car-model');
+        var noPol = element.getAttribute('data-nopol');
+        var merk = element.getAttribute('data-car-merk');
+        var timeS = "Pagi";
+        var url = "http://cms-garasikitaindonesia.com/"+kodeBooking+".pdf";
+
+        var contentMessage = "Selamat "+timeS+" kak <br> Berikut kami lampirkan report hasil inspeksi pada unit "+carModel+" dengan nomor polisi "+noPol+".<br> Terima kasih sudah mengunakan jasa inspeksi Garasi Kita Indonesia, kami akan senantiasa membantu kakak mendapatkan #MOBILSIAPJALAN <br> Pake batik, makan kedondong,<br> kakak baik, bantu review kami dong :))<br> Support kak "+name+" sangat berarti untuk usaha kami .<br><br> Dimohon waktunya sebentar saja kak, untuk review kami dengan klik tombol dibawah ini.<br><br>boleh ya kak? :)";
+
+        $('#exampleModal').modal('show');
+        $('#myModalLabel').html(contentMessage);
+
+
+        $('#contentMessage').val(carModel+";"+noPol+";"+name);
+        $('#kode_booking').val(kodeBooking);
+        $('#nocust').val(participant);
+        $('#url').val(url);
+
+        $('#contentMessage_up').val(carModel+";"+noPol+";"+name);
+        $('#kode_booking_up').val(kodeBooking);
+        $('#nocust_up').val(participant);
+        $('#url_up').val(url);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
 
 </body>
 

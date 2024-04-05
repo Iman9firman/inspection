@@ -1,23 +1,20 @@
 package com.garasi.kita.inspection.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.*;
-import com.garasi.kita.inspection.repositories.InspectionRepository;
 import com.garasi.kita.inspection.service.*;
-import com.lowagie.text.ListItem;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,21 +22,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.LocalTime;
 import java.util.*;
+
+
+import okhttp3.RequestBody;
 
 @Controller
 public class InspectionController {
@@ -136,6 +131,7 @@ public class InspectionController {
         }
 
         model.addAttribute("inspection", inspections);
+        model.addAttribute("message", new Message());
         return "inspection_list";
     }
 
@@ -161,6 +157,7 @@ public class InspectionController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
     }
+
 
     @GetMapping("/detailInspection")
     public String inspectionDetail(Model model, @RequestParam("kode_booking") String kode) {
@@ -461,6 +458,108 @@ public class InspectionController {
         return "redirect:/";
     }
 
+    @Autowired
+    private MyPostService myPostService;
+
+    @PostMapping("/inputMessage")
+    public String getMessageInput(Model model, @ModelAttribute Message message) {
+
+        message.setCreate_at(new Date());
+        String path = pathOutputPdf;
+
+        Path sourceFile = Paths.get(path + "/" + message.getKode_booking() + ".pdf");
+        Path targetFile = Paths.get("/var/www/html/" + message.getKode_booking() + ".pdf"); // Ganti dengan jalur file target di direktori /var/www/html
+
+        message.setUrl(targetFile.toString());
+        try {
+            Files.copy(sourceFile, targetFile);
+            inpectionService.saveData(message);
+            LocalTime currentTime = LocalTime.now();
+
+            String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
+            String urlFile = "http://cms-garasikitaindonesia.com/" + message.getKode_booking() + ".pdf";
+            myPostService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            LoggerFactory.getLogger(InspectionController.class).error("inputMessage>>" + e.getMessage());
+        }
+        return "redirect:/messageList";
+    }
+
+    public static String replacePhoneNumber(String phoneNumber) {
+        String regex = "^(08|62)(\\d+)$";
+        return phoneNumber.replaceAll(regex, "+62$2");
+    }
+
+    public static String greetBasedOnTime(LocalTime currentTime) {
+        String greeting;
+
+        // Memeriksa jam saat ini untuk memberikan salam yang sesuai
+        if (currentTime.isAfter(LocalTime.of(11, 0)) && currentTime.isBefore(LocalTime.of(14, 0))) {
+            greeting = "Siang";
+        } else if (currentTime.isAfter(LocalTime.of(14, 59)) && currentTime.isBefore(LocalTime.of(19, 0))) {
+            greeting = "Petang";
+        } else if (currentTime.isAfter(LocalTime.of(19, 01)) && currentTime.isBefore(LocalTime.of(24, 0))) {
+            greeting = "Petang";
+        } else {
+            greeting = "Pagi";
+        }
+
+        return greeting;
+    }
+
+    private String contentWA(String id, String participant, String urlFile, String param1, String param2, String param3, String param4) {
+        JSONObject headervalue = new JSONObject();
+        headervalue.put("type", "document");
+        headervalue.put("url", urlFile);
+
+        JSONObject body1 = new JSONObject();
+        body1.put("type", "text");
+        body1.put("text", param1);
+
+        JSONObject body2 = new JSONObject();
+        body2.put("type", "text");
+        body2.put("text", param2);
+
+        JSONObject body3 = new JSONObject();
+        body3.put("type", "text");
+        body3.put("text", param3);
+
+        JSONObject body4 = new JSONObject();
+        body4.put("type", "text");
+        body4.put("text", param4);
+
+        JSONObject componenHeader = new JSONObject();
+        componenHeader.put("type", "header");
+        componenHeader.put("parameters", new JSONArray().put(headervalue));
+
+        JSONObject componenBody = new JSONObject();
+        componenBody.put("type", "body");
+        componenBody.put("parameters", new JSONArray().put(body1).put(body2).put(body3).put(body4));
+
+
+        JSONArray components = new JSONArray();
+        components.put(componenHeader);
+        components.put(componenBody);
+
+        JSONObject template = new JSONObject();
+        template.put("language", "id");
+        template.put("name", "report_review");
+        template.put("components", components);
+
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("user", new JSONObject().put("msisdn", replacePhoneNumber(participant)));
+        jsonObject.put("clientMessageId", id);
+        jsonObject.put("type", "template");
+        jsonObject.put("content", new JSONObject().put("template", template));
+
+        LoggerFactory.getLogger(InspectionController.class).error(jsonObject.toString());
+
+        return jsonObject.toString();
+    }
+
     private List<PhotoItem> listPhoto(String kode, ArrayList<String> fdl) {
         List<PhotoItem> listPhotos = new ArrayList<>();
         for (String fd : fdl) {
@@ -487,5 +586,81 @@ public class InspectionController {
         return "login";
     }
 
+    @PostMapping("/single-file-upload")
+    public String handleFileUploadUsingCurl(
+            @RequestParam("file") MultipartFile file, @ModelAttribute Message message) throws IOException {
+
+        Map<String, Object> response = new HashMap<>();
+        if (file.isEmpty()) {
+            // Handle empty file error
+            response.put("error", "File is empty.");
+            return "redirect:/inspectionList";
+        } else if (!file.getOriginalFilename().endsWith(".pdf")) {
+            // Handle invalid file format error
+            response.put("error", "Invalid file format. Only .txt files are allowed.");
+            return "redirect:/inspectionList";
+        } else {
+            String sanitizedFileName = sanitizeFileName(file.getOriginalFilename());
+            // Check if the sanitized file name is different from the original file name
+            if (!sanitizedFileName.equals(file.getOriginalFilename())) {
+                // Handle file name with restricted characters error
+                response.put("error", "File name contains restricted characters. Please rename the file.");
+                return "redirect:/inspectionList";
+            }
+
+            String name = new Date().getTime() + "_" + file.getOriginalFilename();
+
+            System.out.println(name);
+
+
+            try {
+                StringBuilder fileNames = new StringBuilder();
+                Path fileNameAndPath = Paths.get("/var/www/html/", name);
+                fileNames.append(file.getOriginalFilename());
+                Files.write(fileNameAndPath, file.getBytes());
+
+                message.setCreate_at(new Date());
+                inpectionService.saveData(message);
+                LocalTime currentTime = LocalTime.now();
+
+                String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
+                String urlFile = "http://cms-garasikitaindonesia.com/" + name;
+                myPostService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                LoggerFactory.getLogger(InspectionController.class).error(e.getMessage());
+            }
+            return "redirect:/messageList";
+
+        }
+    }
+
+    private String sanitizeFileName(String fileName) {
+        String restrictedCharacters = "/\\:*?\"<>|";
+        String sanitizedFileName = fileName.replaceAll("[" + restrictedCharacters + "]", "_");
+        System.out.println(sanitizedFileName);
+        return sanitizedFileName;
+    }
+
+    @GetMapping("/messageList")
+    public String messageList(Model model) {
+        List<Message> messages = new ArrayList<>();
+        model.addAttribute("appName", appName);
+
+        int number = 1;
+        for (Message message : inpectionService.getDataMessage()) {
+            message.setId(number);
+            messages.add(message);
+            number++;
+        }
+
+        model.addAttribute("messages", messages);
+
+        return "message_result_list";
+    }
+
 
 }
+
+

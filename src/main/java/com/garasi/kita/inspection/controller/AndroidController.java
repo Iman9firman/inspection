@@ -139,7 +139,7 @@ public class AndroidController {
 
     @PostMapping("/lastPageV2")
     public ResponseEntity<Object> lastPageV2(@RequestParam("kode") String kode, HttpServletRequest request) {
-        dao.updateInspection(kode, 3);
+        dao.updateInspectionV2(kode, 3);
         exportReportService.newReportDocV2(kode);
         HashMap<String, String> result = new HashMap<>();
         result.put("status", "success");

@@ -41,7 +41,8 @@ public class SchedullerJob {
                     case "2":
                         logger.info("convertDoc >>" + kb.split(";")[0]);
                         dao.updateInspection(kb.split(";")[0], 3);
-                        if (kb.split(";")[2] == "2") {
+                        logger.info(kb.split(";")[2]);
+                        if (kb.split(";")[2].equalsIgnoreCase("2")) {
                             exportReportService.newReportDocV2(kb.split(";")[0]);
                         } else {
                             exportReportService.newReportDoc(kb.split(";")[0]);

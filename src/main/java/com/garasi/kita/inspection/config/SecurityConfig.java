@@ -60,6 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/Audio/**", "/js/**", "/webjars/**", "/mobile/**", "/downloadInspection2/**");
+        web.ignoring().antMatchers("/Audio/**", "/js/**", "/webjars/**", "/mobile/**", "/downloadInspection2/**", "/downloadPdf/**");
     }
 }

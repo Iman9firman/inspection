@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.garasi.kita'
-version = '0.2.1-alpha'
+version = '0.2.1-alpha2F'
 sourceCompatibility = '11'
 
 repositories {
@@ -40,6 +40,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    implementation 'org.json:json:20211205'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3' // Versi dapat disesuaikan
 }
 
 tasks.named('test') {
