@@ -32,6 +32,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 import okhttp3.RequestBody;
@@ -464,7 +466,9 @@ public class InspectionController {
     @PostMapping("/inputMessage")
     public String getMessageInput(Model model, @ModelAttribute Message message) {
 
-        message.setCreate_at(new Date());
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"));
+        Date date = calendar.getTime();
+        message.setCreate_at(date);
         String path = pathOutputPdf;
 
         Path sourceFile = Paths.get(path + "/" + message.getKode_booking() + ".pdf");
@@ -472,13 +476,26 @@ public class InspectionController {
 
         message.setUrl(targetFile.toString());
         try {
+            if (Files.exists(targetFile)) {
+                Files.delete(targetFile);
+            }
+            
             Files.copy(sourceFile, targetFile);
             inpectionService.saveData(message);
             LocalTime currentTime = LocalTime.now();
 
-            String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
-            String urlFile = "http://cms-garasikitaindonesia.com/" + message.getKode_booking() + ".pdf";
-            myPostService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+
+            try {
+                Thread.sleep(5000);
+
+
+                String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
+                String urlFile = "http://cms-garasikitaindonesia.com/" + message.getKode_booking() + ".pdf";
+                myPostService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+
+            } catch (InterruptedException e) {
+                System.err.println("Terjadi kesalahan dalam menahan eksekusi: " + e.getMessage());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -488,8 +505,18 @@ public class InspectionController {
     }
 
     public static String replacePhoneNumber(String phoneNumber) {
-        String regex = "^(08|62)(\\d+)$";
-        return phoneNumber.replaceAll(regex, "+62$2");
+        Pattern pattern = Pattern.compile("^(08|62)(\\d+)$");
+        Matcher matcher = pattern.matcher(phoneNumber);
+        if (matcher.matches()) {
+            String prefix = matcher.group(1);
+            if ("08".equals(prefix)) {
+                return phoneNumber.replaceFirst("^08", "+628");
+            } else {
+                return "+" + phoneNumber;
+            }
+        } else {
+            return phoneNumber;
+        }
     }
 
     public static String greetBasedOnTime(LocalTime currentTime) {
@@ -608,7 +635,10 @@ public class InspectionController {
                 return "redirect:/inspectionList";
             }
 
-            String name = new Date().getTime() + "_" + file.getOriginalFilename();
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"));
+            Date date = calendar.getTime();
+
+            String name = date.getTime() + "_" + file.getOriginalFilename();
 
             System.out.println(name);
 
@@ -619,13 +649,20 @@ public class InspectionController {
                 fileNames.append(file.getOriginalFilename());
                 Files.write(fileNameAndPath, file.getBytes());
 
-                message.setCreate_at(new Date());
+                message.setCreate_at(date);
                 inpectionService.saveData(message);
                 LocalTime currentTime = LocalTime.now();
 
-                String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
-                String urlFile = "http://cms-garasikitaindonesia.com/" + name;
-                myPostService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+                try {
+                    // Menahan eksekusi selama 5 detik (5000 milidetik)
+                    Thread.sleep(5000);
+                    String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
+                    String urlFile = "http://cms-garasikitaindonesia.com/" + name;
+                    myPostService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+                } catch (InterruptedException e) {
+                    System.err.println("Terjadi kesalahan dalam menahan eksekusi: " + e.getMessage());
+                }
+
 
             } catch (Exception e) {
                 e.printStackTrace();

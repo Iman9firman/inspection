@@ -9,6 +9,7 @@ import com.garasi.kita.inspection.repositories.InspectionRepository;
 import com.garasi.kita.inspection.repositories.InspectorRepository;
 import com.garasi.kita.inspection.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,8 @@ public class InpectionService {
     }
 
     public List<Message> getDataMessage() {
-        return messageRepository.findAll();
+        Sort sortByCreatedAtDesc = Sort.by(Sort.Direction.DESC, "id");
+        return messageRepository.findAll(sortByCreatedAtDesc);
     }
 
     public Inspection saveData(Inspection inspection) {

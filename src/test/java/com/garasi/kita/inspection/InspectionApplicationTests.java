@@ -13,6 +13,8 @@ import org.springframework.util.FileCopyUtils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @SpringBootTest
@@ -62,6 +64,29 @@ class InspectionApplicationTests {
         //excelExportService.createGridImage();
     }
 
+    @Test
+    void name() {
+
+        System.out.println(replacePhoneNumber("085891307575"));
+        System.out.println(replacePhoneNumber("6285891307575"));
+
+    }
+
+    public static String replacePhoneNumber(String phoneNumber) {
+        Pattern pattern = Pattern.compile("^(08|62)(\\d+)$");
+        Matcher matcher = pattern.matcher(phoneNumber);
+        if (matcher.matches()) {
+            String prefix = matcher.group(1);
+            if ("08".equals(prefix)) {
+                return phoneNumber.replaceFirst("^08", "+628");
+            } else {
+                return "+" + phoneNumber;
+            }
+        } else {
+            return phoneNumber;
+        }
+    }
 }
 //todo : insert image
 //todo : top align
+

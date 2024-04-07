@@ -1,10 +1,11 @@
 package com.garasi.kita.inspection.service;
 
+import com.garasi.kita.inspection.controller.InspectionController;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 
 
 @Service
@@ -31,5 +32,7 @@ public class MyPostService {
 
         System.out.println("Status Code: " + statusCode);
         System.out.println("Response Body: " + responseBody);
+
+        LoggerFactory.getLogger(MyPostService.class).info(statusCode + ">>" + responseBody);
     }
 }
