@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.garasi.kita'
-version = '0.2.1-alpha3a'
+version = '0.2.1-alpha4'
 sourceCompatibility = '11'
 
 repositories {
@@ -42,7 +42,7 @@ dependencies {
 
     implementation 'org.json:json:20211205'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3' // Versi dapat disesuaikan
+
 }
 
 tasks.named('test') {

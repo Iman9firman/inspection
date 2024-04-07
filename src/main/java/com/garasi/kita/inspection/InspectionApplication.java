@@ -11,8 +11,5 @@ public class InspectionApplication {
     public static void main(String[] args) {
         SpringApplication.run(InspectionApplication.class, args);
     }
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+
 }

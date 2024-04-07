@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -48,7 +46,7 @@ public class RestService {
             map.put("fileName", kodeBooking);
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map);
-            
+
             ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
 
             // check response status code
@@ -64,5 +62,28 @@ public class RestService {
             dao.updateInspection(kodeBooking, 9);
         }
 
+    }
+
+    public void postData(String url, String requestBody) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth("48lvVBKzWJG93ymRcExnKgT5kHky37R6ReVufxUI96s");
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        HttpStatus statusCode = responseEntity.getStatusCode();
+        String responseBody = responseEntity.getBody();
+
+        System.out.println("Status Code: " + statusCode);
+        System.out.println("Response Body: " + responseBody);
+
+        LoggerFactory.getLogger(RestService.class).info(statusCode + ">>" + responseBody);
     }
 }
