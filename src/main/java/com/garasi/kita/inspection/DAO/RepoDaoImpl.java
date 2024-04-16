@@ -2,6 +2,7 @@ package com.garasi.kita.inspection.DAO;
 
 import com.garasi.kita.inspection.model.Inspection;
 import com.garasi.kita.inspection.model.InspectionDetail;
+import com.garasi.kita.inspection.model.Message;
 import com.garasi.kita.inspection.model.PhotoItem;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,31 @@ public class RepoDaoImpl implements RepoDao {
             LoggerFactory.getLogger(getClass()).error("Error get task ", e);
         }
         return inspectionList;
+    }
+
+    @Override
+    public int updateMessageById(Long id, String status, String uuid) {
+        String query = "UPDATE `message` SET `uuid` = '" + uuid + "',`status` = '" + status + "' WHERE `id` = " + id;
+        return jdbcTemplate.update(query);
+    }
+
+    @Override
+    public int updateMessageByUu(String status, String uuid) {
+        String query = "UPDATE `message` SET `status` = '" + status + "' WHERE `uuid` = '" + uuid + "'";
+        return jdbcTemplate.update(query);
+    }
+
+    @Override
+    public List<Message> getMessageDR() {
+        List<Message> messages = new ArrayList<>();
+        String query = "SELECT * FROM `message` WHERE `status` = 'queued' AND `uuid` IS NOT NULL LIMIT 50;";
+        try {
+            messages = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(Message.class));
+            return messages;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(getClass()).error("Error get task ", e);
+        }
+        return messages;
     }
 
     @Override
@@ -168,5 +194,6 @@ public class RepoDaoImpl implements RepoDao {
         }
         return kodeBooking;
     }
+
 
 }

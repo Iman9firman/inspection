@@ -16,6 +16,7 @@ public class Message {
     long id;
 
     String content;
+    String uuid;
     String participant;
     String kode_booking;
     String url;

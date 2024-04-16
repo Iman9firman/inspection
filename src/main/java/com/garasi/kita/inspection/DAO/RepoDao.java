@@ -2,6 +2,7 @@ package com.garasi.kita.inspection.DAO;
 
 import com.garasi.kita.inspection.model.Inspection;
 import com.garasi.kita.inspection.model.InspectionDetail;
+import com.garasi.kita.inspection.model.Message;
 import com.garasi.kita.inspection.model.PhotoItem;
 
 import java.util.ArrayList;
@@ -35,5 +36,13 @@ public interface RepoDao {
     List<String> getGenerateReport();
 
     List<Inspection> listHistoryTask(String username, String startdate, String endDate);
+
+    int updateMessageById(Long id, String status, String uuid);
+
+    int updateMessageByUu(String status, String uuid);
+
+    List<Message> getMessageDR();
+
+
 }
 

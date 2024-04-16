@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garasi.kita.inspection.DAO.RepoDao;
 import com.garasi.kita.inspection.model.*;
 import com.garasi.kita.inspection.service.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 @Controller
 public class InspectionController {
@@ -474,17 +476,15 @@ public class InspectionController {
             }
 
             Files.copy(sourceFile, targetFile);
-            inpectionService.saveData(message);
+            message.setStatus("pending");
+            Message message1 = inpectionService.saveData(message);
             LocalTime currentTime = LocalTime.now();
-
 
             try {
                 Thread.sleep(5000);
-
-
                 String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
                 String urlFile = "http://cms-garasikitaindonesia.com/" + message.getKode_booking() + ".pdf";
-                restService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+                restService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]), message1.getId());
 
             } catch (InterruptedException e) {
                 System.err.println("Terjadi kesalahan dalam menahan eksekusi: " + e.getMessage());
@@ -643,7 +643,7 @@ public class InspectionController {
                 Files.write(fileNameAndPath, file.getBytes());
 
                 message.setCreate_at(date);
-                inpectionService.saveData(message);
+                Message message1 = inpectionService.saveData(message);
                 LocalTime currentTime = LocalTime.now();
 
                 try {
@@ -651,7 +651,7 @@ public class InspectionController {
                     Thread.sleep(5000);
                     String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
                     String urlFile = "http://cms-garasikitaindonesia.com/" + name;
-                    restService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]));
+                    restService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]), message1.getId());
                 } catch (InterruptedException e) {
                     System.err.println("Terjadi kesalahan dalam menahan eksekusi: " + e.getMessage());
                 }
