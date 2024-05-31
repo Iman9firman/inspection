@@ -12,6 +12,7 @@ public class TransaksiDetail {
     private int barangReject;
     private double totalHarga;
     private String productId;
+    private String namaBarang;
 
     public int getTransaksiDetailId() {
         return transaksiDetailId;
@@ -77,6 +78,14 @@ public class TransaksiDetail {
         this.productId = productId;
     }
 
+    public String getNamaBarang() {
+        return namaBarang;
+    }
+
+    public void setNamaBarang(String namaBarang) {
+        this.namaBarang = namaBarang;
+    }
+
     public static TransaksiDetail fromResultSet(ResultSet rs) throws SQLException {
         TransaksiDetail transaksiDetail = new TransaksiDetail();
         transaksiDetail.setTransaksiDetailId(rs.getInt("transaksi_detail_id"));
@@ -87,6 +96,7 @@ public class TransaksiDetail {
         transaksiDetail.setBarangReject(rs.getInt("barang_reject"));
         transaksiDetail.setTotalHarga(rs.getDouble("total_harga"));
         transaksiDetail.setProductId(rs.getString("product_id"));
+        transaksiDetail.setNamaBarang(rs.getString("namaBarang"));
         return transaksiDetail;
 
     }

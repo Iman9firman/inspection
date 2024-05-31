@@ -10,25 +10,13 @@ import java.util.UUID;
 public class Transaksi {
     private int id;
     private String transaksiId;
+    private String invoceNumber;
     private int branchId;
     private String createdBy;
     private Timestamp tanggalTransaksi;
     private String keterangan;
     private double totalTransaksi;
     private int status;
-
-    public Transaksi(int branchId, String createdBy, Timestamp tanggalTransaksi, String keterangan, double totalTransaksi) {
-        this.transaksiId = generateTransaksiId(branchId, tanggalTransaksi);
-        this.branchId = branchId;
-        this.createdBy = createdBy;
-        this.tanggalTransaksi = tanggalTransaksi;
-        this.keterangan = keterangan;
-        this.totalTransaksi = totalTransaksi;
-    }
-
-    public Transaksi() {
-
-    }
 
     public String generateTransaksiId(int branchId, Date tanggalTransaksi) {
         String branchCode = String.format("%03d", branchId); // Format branchId to 3 digits
@@ -103,11 +91,19 @@ public class Transaksi {
         this.status = status;
     }
 
+    public String getInvoceNumber() {
+        return invoceNumber;
+    }
+
+    public void setInvoceNumber(String invoceNumber) {
+        this.invoceNumber = invoceNumber;
+    }
 
     public static Transaksi fromResultSet(ResultSet rs) throws SQLException {
         Transaksi transaksi = new Transaksi();
         transaksi.setId(rs.getInt("id"));
         transaksi.setTransaksiId(rs.getString("transaksi_id"));
+        transaksi.setInvoceNumber(rs.getString("invoceNumber"));
         transaksi.setBranchId(rs.getInt("branch_id"));
         transaksi.setCreatedBy(rs.getString("created_by"));
         transaksi.setTanggalTransaksi(rs.getTimestamp("tanggal_transaksi"));
