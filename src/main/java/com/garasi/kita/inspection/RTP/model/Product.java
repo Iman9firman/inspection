@@ -1,5 +1,7 @@
 package com.garasi.kita.inspection.RTP.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 
 public class Product {

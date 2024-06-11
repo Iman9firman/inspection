@@ -1,5 +1,6 @@
 package com.garasi.kita.inspection.RTP.model;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -12,6 +13,7 @@ public class PenjualanDetail {
     private String status;
     private String staf;
     private String branchName;
+    private Date createDate;
 
     public PenjualanDetail() {
     }
@@ -24,6 +26,17 @@ public class PenjualanDetail {
         this.status = status;
         this.staf = staf;
         this.branchName = branchName;
+    }
+
+    public PenjualanDetail(String invoiceId, double grandTotal, double modal, double untung, String status, String staf, String branchName, Date createDate) {
+        this.invoiceId = invoiceId;
+        this.grandTotal = grandTotal;
+        this.modal = modal;
+        this.untung = untung;
+        this.status = status;
+        this.staf = staf;
+        this.branchName = branchName;
+        this.createDate = createDate;
     }
 
     // Getters and Setters
@@ -83,6 +96,14 @@ public class PenjualanDetail {
         this.branchName = branchName;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     public static PenjualanDetail fromResultSet(ResultSet rs) throws SQLException {
         String invoiceId = rs.getString("invoiceId");
         double grandTotal = rs.getDouble("grandTotal");
@@ -91,7 +112,8 @@ public class PenjualanDetail {
         String status = rs.getString("status");
         String staf = rs.getString("staf");
         String branchName = rs.getString("branch_name");
+        Date createDate = rs.getDate("createDate");
 
-        return new PenjualanDetail(invoiceId, grandTotal, modal, untung, status, staf, branchName);
+        return new PenjualanDetail(invoiceId, grandTotal, modal, untung, status, staf, branchName, createDate);
     }
 }

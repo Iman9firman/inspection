@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,7 +68,29 @@ public class AndroidRTPController {
                 stock.put("product_name", namaBarang);
 
                 rtpRepositories.insertHistory("Admin", "Masuk", new JSONArray().put(stock), 1);
-                        result.put("status", "success");
+                result.put("status", "success");
+                result.put("data", "Number of rows inserted: " + addProduct);
+            } else {
+                result.put("status", "failed");
+                result.put("data", "Failed to insert product.");
+            }
+        } catch (Exception e) {
+            result.put("status", "failed");
+            result.put("data", e.getMessage());
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/updateProduct")
+    public ResponseEntity<Object> updateProduct(@RequestParam String user, @RequestParam String kodeBarang, @RequestParam String namaBarang, @RequestParam String kategori, @RequestParam double hargaModal, @RequestParam double hargaJual,
+                                                HttpServletRequest request) {
+
+
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            int addProduct = rtpRepositories.updateProduct(kodeBarang, namaBarang, hargaModal, hargaJual, kategori);
+            if (addProduct > 0) {
+                result.put("status", "success");
                 result.put("data", "Number of rows inserted: " + addProduct);
             } else {
                 result.put("status", "failed");
@@ -122,11 +146,11 @@ public class AndroidRTPController {
     }
 
 
-    @PostMapping("/getStockAllBranch")
-    public ResponseEntity<Object> getStockAllBranch(HttpServletRequest request) {
+    @PostMapping("/getStockAllBranch/{branchid}")
+    public ResponseEntity<Object> getStockAllBranch(HttpServletRequest request, @PathVariable int branchid) {
         HashMap<String, Object> result = new HashMap<>();
         HashMap<String, List<Stock>> kacabStock = new HashMap<>();
-        List<Stock> stockInfoList = rtpRepositories.getStockAllBranch();
+        List<Stock> stockInfoList = rtpRepositories.getStockAllBranch(branchid);
         String kacabIdLast = "";
         List<Stock> stockListTemp = new ArrayList<>();
         if (stockInfoList != null && !stockInfoList.isEmpty()) {
@@ -142,6 +166,7 @@ public class AndroidRTPController {
             result.put("data", "No stock info found for current date.");
         }
         result.put("data", kacabStock);
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -222,7 +247,6 @@ public class AndroidRTPController {
             try {
                 rtpRepositories.insertStock(detailHistoryStock.getProduct_id(), detailHistoryStock.getGood(), detailHistoryStock.getBad(), historyStock.getBranch_id());
                 if (historyStock.getBranch_id() > 1) {
-                    //update stock gudang
                     rtpRepositories.insertStock(detailHistoryStock.getProduct_id(), -detailHistoryStock.getGood(), -detailHistoryStock.getBad(), 1);
                 }
                 HashMap<String, Object> stock = new HashMap<>();
@@ -285,23 +309,17 @@ public class AndroidRTPController {
             for (Stock stock : stockInfoList) {
                 stockGudang.put(stock.getProduct().getNamaBarang(), stock.getGood());
             }
-
+            
             for (TransaksiDetail detailHistoryStock : transaksiRequest.getTransaksiDetails()) {
-                try {
-                    Integer sisaStock = stockGudang.get(detailHistoryStock.getNamaBarang());
-                    if (detailHistoryStock.getPengambilanBarang() > sisaStock) {
-                        errornya += detailHistoryStock.getNamaBarang() + " tersisa " + sisaStock + ", ";
-                    }
 
-                } catch (Exception exception) {
-                    result.put("status", "erorr");
-                    result.put("data", exception.getMessage());
-                    return new ResponseEntity<>(result, HttpStatus.OK);
+                Integer sisaStock = stockGudang.getOrDefault(detailHistoryStock.getNamaBarang(), 0);
+                if (detailHistoryStock.getPengambilanBarang() > sisaStock) {
+                    errornya += detailHistoryStock.getNamaBarang() + " tersisa " + sisaStock + ", ";
                 }
             }
 
             if (!errornya.equalsIgnoreCase("")) {
-                result.put("status", "eror");
+                result.put("status", "error");
                 result.put("data", errornya + "di Gudang.");
                 return new ResponseEntity<>(result, HttpStatus.OK);
             }
@@ -325,7 +343,8 @@ public class AndroidRTPController {
     }
 
     @PostMapping("/updateTransaksi/{branchid}")
-    public ResponseEntity<Object> updateTransaksi(@PathVariable int branchid, @RequestBody TransaksiRequest transaksiRequest) {
+    public ResponseEntity<Object> updateTransaksi(@PathVariable int branchid,
+                                                  @RequestBody TransaksiRequest transaksiRequest) {
 
         int total = 0;
         List<TransaksiDetail> transaksiDetail = transaksiRequest.getTransaksiDetails();
@@ -398,9 +417,86 @@ public class AndroidRTPController {
         return new ResponseEntity<>(penjualan, HttpStatus.OK);
     }
 
+    @PostMapping("/catatanPenjualanv2")
+    public ResponseEntity<Object> catatanPenjualanv2(@RequestParam String dateRange) {
+        System.out.println(dateRange);
+
+        String[] parts = dateRange.split("-");
+        String startDateString = parts[0].trim();
+        String endDateString = parts[1].trim();
+
+        Map<String, String> monthMap = new HashMap<>();
+        monthMap.put("Januari", "January");
+        monthMap.put("Februari", "February");
+        monthMap.put("Maret", "March");
+        monthMap.put("April", "April");
+        monthMap.put("Mei", "May");
+        monthMap.put("Juni", "June");
+        monthMap.put("Juli", "July");
+        monthMap.put("Agustus", "August");
+        monthMap.put("September", "September");
+        monthMap.put("Oktober", "October");
+        monthMap.put("November", "November");
+        monthMap.put("Desember", "December");
+
+        for (Map.Entry<String, String> entry : monthMap.entrySet()) {
+            startDateString = startDateString.replace(entry.getKey(), entry.getValue());
+            endDateString = endDateString.replace(entry.getKey(), entry.getValue());
+        }
+        LocalDate endDate = LocalDate.parse(endDateString, DateTimeFormatter.ofPattern("d MMM yyyy"));
+        LocalDate startDate = LocalDate.parse(startDateString + " " + endDate.getYear(), DateTimeFormatter.ofPattern("d MMM yyyy"));
+        String formattedStart = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00:00"));
+        String formattedEnd = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 23:59:59"));
+
+        List<PenjualanDetail> penjualanDetailList = rtpRepositories.getInvocePeriod(formattedStart, formattedEnd);
+        RekapPenjualan rekapPenjualan = new RekapPenjualan();
+        List<RekapPenjualan.Pengawas> pengawasList = new ArrayList<>();
+        List<RekapPenjualan.DetailBalance> detailBalance = new ArrayList<>();
+        List<RekapPenjualan.Detail> detailList = new ArrayList<>();
+        double totalBalance = 0;
+        Map<String, Double> grandTotalByStaf = new HashMap<>();
+        Map<Integer, Double> grandTotalByDayOfMonth = new HashMap<>();
+        for (PenjualanDetail penjualanDetail : penjualanDetailList) {
+            String staf = penjualanDetail.getStaf();
+            double grandTotalStaf = grandTotalByStaf.getOrDefault(staf, 0.0);
+            grandTotalByStaf.put(staf, grandTotalStaf + penjualanDetail.getGrandTotal());
+            LocalDate createDate = penjualanDetail.getCreateDate().toLocalDate();
+            int dayOfMonth = createDate.getDayOfMonth();
+            double grandTotalDayOfMonth = grandTotalByDayOfMonth.getOrDefault(dayOfMonth, 0.0);
+            grandTotalByDayOfMonth.put(dayOfMonth, grandTotalDayOfMonth + penjualanDetail.getGrandTotal());
+            detailList.add(new RekapPenjualan.Detail(penjualanDetail.getInvoiceId(), String.valueOf(penjualanDetail.getGrandTotal()), penjualanDetail.getBranchName(), penjualanDetail.getStaf(), String.valueOf(penjualanDetail.getCreateDate().toLocalDate())));
+            totalBalance += penjualanDetail.getGrandTotal();
+        }
+        for (Map.Entry<String, Double> entry : grandTotalByStaf.entrySet()) {
+            pengawasList.add(new RekapPenjualan.Pengawas(entry.getKey(), String.valueOf(entry.getValue())));
+        }
+        /*for (Map.Entry<Integer, Double> entry : grandTotalByDayOfMonth.entrySet()) {
+            detailBalance.add(new RekapPenjualan.DetailBalance(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
+        }*/
+
+        // Menambahkan data dari grandTotalByDayOfMonth ke detailBalance
+        grandTotalByDayOfMonth.entrySet().stream()
+                .sorted(Comparator.comparingInt(Map.Entry::getKey)) // Mengurutkan berdasarkan dayOfMonth
+                .forEach(entry -> {
+                    // Mengubah dayOfMonth menjadi string dengan format yang diinginkan
+                    String dayOfMonthString = entry.getKey() < 10 ? "0" + entry.getKey() : String.valueOf(entry.getKey());
+                    detailBalance.add(new RekapPenjualan.DetailBalance(dayOfMonthString, String.valueOf(entry.getValue())));
+                });
+
+
+        rekapPenjualan.setTotalBalance(String.valueOf(totalBalance));
+        rekapPenjualan.setPengawas(pengawasList);
+        rekapPenjualan.setDetailBalance(detailBalance);
+        rekapPenjualan.setDetail(detailList);
+
+
+        return new ResponseEntity<>(rekapPenjualan, HttpStatus.OK);
+    }
+
 
     @PostMapping("/generateInvoce/{date}/{branchid}")
-    public ResponseEntity<Object> generateInvoce(@PathVariable String date, @PathVariable int branchid, @RequestParam String name) {
+    public ResponseEntity<Object> generateInvoce(@PathVariable String date, @PathVariable int branchid,
+                                                 @RequestParam String name) {
         List<InvoiceDetail> invoiceDetailList = rtpRepositories.getInvoiceDetail(date, branchid);
         List<String> errorList = new ArrayList<>();
         if (invoiceDetailList.size() == 0) {

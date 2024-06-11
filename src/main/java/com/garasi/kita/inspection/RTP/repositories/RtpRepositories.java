@@ -35,10 +35,18 @@ public class RtpRepositories {
 
     }
 
-    /*public int addProduct(Product product) throws SQLException {
-        String query = "INSERT INTO rtp_barang (kodeBarang, namaBarang, stockAwal, hargaModal, hargaJual, create_by, create_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(query, product.getKodeBarang(), product.getNamaBarang(), product.getStockAwal(), product.getHargaModal(), product.getHargaJual(), product.getCreate_by(), product.getCreate_date());
-    }*/
+    public int updateProduct(String kodeBarang, String namaBarang, double hargaModal, double hargaJual, String kategori) throws SQLException {
+        String query = "UPDATE `rtp_barang` SET\n" +
+                "`kodeBarang` = ?,\n" +
+                "`namaBarang` = ?,\n" +
+                "`hargaModal` = ?,\n" +
+                "`hargaJual` = ?,\n" +
+                "`kategori` = ?,\n" +
+                "`create_date` = now()\n" +
+                "WHERE `kodeBarang` = ?;";
+        return jdbcTemplate.update(query, kodeBarang, namaBarang, hargaModal, hargaJual, kategori, kodeBarang);
+
+    }
 
     public int addProduct(Product product) throws SQLException {
         String query = "INSERT INTO rtp_barang (kodeBarang, namaBarang, stockAwal, hargaModal, hargaJual, create_by, create_date,kategori) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
@@ -62,7 +70,7 @@ public class RtpRepositories {
     }
 
     public List<Product> listProduct() {
-        String query = "SELECT * FROM rtp_barang where status = 1 order by create_date desc;";
+        String query = "SELECT * FROM rtp_barang where status = 1 order by namaBarang;";
         return jdbcTemplate.query(query, new RowMapper<Product>() {
             @Override
             public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -118,13 +126,31 @@ public class RtpRepositories {
         }, new Object[]{branch});
     }
 
-    public List<Stock> getStockAllBranch() {
-        String query = "SELECT s.stock_id,p.id, p.namaBarang, s.good,s.bad, g.branch_name as namaCabang\n" +
-                "FROM rtp_stock s\n" +
-                "INNER JOIN rtp_barang p ON s.product_id = p.id\n" +
-                "INNER JOIN rtp_kacab g ON s.branch_id= g.branch_id where  s.branch_id != 1 ;";
+    public List<Stock> getStockAllBranch(int branchId) {
 
-        return jdbcTemplate.query(query, new RowMapper<Stock>() {
+        String baseQuery = "SELECT " +
+                "    p.id, " +
+                "    p.namaBarang, " +
+                "    COALESCE(s.stock_id, 0) AS stock_id, " +
+                "    COALESCE(s.good, 0) AS good, " +
+                "    COALESCE(s.bad, 0) AS bad, " +
+                "    g.branch_name AS namaCabang, " +
+                "    g.branch_id AS idCabang " +
+                "FROM " +
+                "    rtp_barang p " +
+                "CROSS JOIN " +
+                "    rtp_kacab g " +
+                "LEFT JOIN " +
+                "    rtp_stock s ON p.id = s.product_id AND g.branch_id = s.branch_id ";
+
+        if (branchId > 1) {
+            baseQuery += "WHERE g.branch_id = " + branchId + " ";
+        }
+
+        baseQuery += "ORDER BY g.branch_id , p.namaBarang;";
+
+        System.out.println(baseQuery);
+        return jdbcTemplate.query(baseQuery, new RowMapper<Stock>() {
             @Override
             public Stock mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Stock stock = new Stock();
@@ -132,7 +158,7 @@ public class RtpRepositories {
                 stock.setProduct(new Product(rs.getInt("id"), rs.getString("namaBarang")));
                 stock.setGood(rs.getInt("good"));
                 stock.setBad(rs.getInt("bad"));
-                stock.setKacab(new Kacab(rs.getString("namaCabang")));
+                stock.setKacab(new Kacab(rs.getInt("idCabang"), rs.getString("namaCabang")));
                 return stock;
             }
         });
@@ -325,6 +351,14 @@ public class RtpRepositories {
                 "FROM `rtp_invoice` rtp\n" +
                 "join rtp_kacab rkb on rtp.branchId = rkb.branch_id\n" +
                 "WHERE DATE(`createDate`) = CURDATE();";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PenjualanDetail.class));
+    }
+
+    public List<PenjualanDetail> getInvocePeriod(String start, String end) {
+        String sql = "SELECT `invoiceId`,`grandTotal`, `modal`, `untung`, `status`,`staf`,rkb.branch_name,createDate\n" +
+                "FROM `rtp_invoice` rtp\n" +
+                "join rtp_kacab rkb on rtp.branchId = rkb.branch_id\n" +
+                "WHERE DATE(`createDate`) BETWEEN '" + start + "' AND '" + end + "';";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PenjualanDetail.class));
     }
 }

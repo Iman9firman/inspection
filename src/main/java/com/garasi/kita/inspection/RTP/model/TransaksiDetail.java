@@ -100,4 +100,21 @@ public class TransaksiDetail {
         return transaksiDetail;
 
     }
+
+
+    @Override
+    public String toString() {
+        return "TransaksiDetail{" +
+                "transaksiDetailId=" + transaksiDetailId +
+                ", transaksiId='" + transaksiId + '\'' +
+                ", pengambilanBarang=" + pengambilanBarang +
+                ", barangTerjual=" + barangTerjual +
+                ", sisaBarang=" + sisaBarang +
+                ", barangReject=" + barangReject +
+                ", totalHarga=" + totalHarga +
+                ", productId='" + productId + '\'' +
+                ", namaBarang='" + namaBarang + '\'' +
+                '}';
+    }
+
 }
