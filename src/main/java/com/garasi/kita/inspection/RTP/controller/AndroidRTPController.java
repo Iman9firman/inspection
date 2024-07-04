@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garasi.kita.inspection.RTP.config.InvoiceIdGenerator;
 import com.garasi.kita.inspection.RTP.model.*;
 import com.garasi.kita.inspection.RTP.repositories.RtpRepositories;
-import com.garasi.kita.inspection.model.Inspection;
+import com.garasi.kita.inspection.RTP.service.KacabService;
+import com.garasi.kita.inspection.RTP.service.UserServiceRTP;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -281,12 +282,61 @@ public class AndroidRTPController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @Autowired
+    private UserServiceRTP userServiceRTP;
+
+    @Autowired
+    private KacabService kacabService;
+
+
+    @PostMapping("/createStaff")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userServiceRTP.createUser(user);
+        return ResponseEntity.ok(createdUser);
+    }
+
+    @PutMapping("/updateStaff/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        Optional<User> updatedUser = userServiceRTP.updateUser(id, userDetails);
+        return updatedUser.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/getStaff")
     public ResponseEntity<Object> getStaff(HttpServletRequest request) {
         HashMap<String, Object> result = new HashMap<>();
-        List<User> listTask = rtpRepositories.listUserStaff();
-        result.put("data", listTask);
+        List<User> listUser = rtpRepositories.listUserStaff();
+        List<Cabang> listCabang = rtpRepositories.listCabang();
+
+        result.put("data", listUser);
+        result.put("cabang", listCabang);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/getBranch")
+    public ResponseEntity<Object> getBranch(HttpServletRequest request) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<Cabang> listCabang = rtpRepositories.listCabang();
+        result.put("cabang", listCabang);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/createCabang")
+    public Kacab createKacab(@RequestBody Kacab kacab) {
+        return kacabService.saveKacab(kacab);
+    }
+
+    @PutMapping("/cabang/{id}")
+    public ResponseEntity<Kacab> updateKacab(@PathVariable Long id, @RequestBody Kacab kacabDetails) {
+        System.out.println(kacabDetails.toString());
+        return ResponseEntity.ok(kacabService.updateKacab(id, kacabDetails));
+    }
+
+    @DeleteMapping("cabang/{id}")
+    public ResponseEntity<Void> deleteKacab(@PathVariable Long id) {
+        kacabService.deleteKacab(id);
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -309,7 +359,7 @@ public class AndroidRTPController {
             for (Stock stock : stockInfoList) {
                 stockGudang.put(stock.getProduct().getNamaBarang(), stock.getGood());
             }
-            
+
             for (TransaksiDetail detailHistoryStock : transaksiRequest.getTransaksiDetails()) {
 
                 Integer sisaStock = stockGudang.getOrDefault(detailHistoryStock.getNamaBarang(), 0);

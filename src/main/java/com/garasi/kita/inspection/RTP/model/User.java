@@ -1,7 +1,14 @@
 package com.garasi.kita.inspection.RTP.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "rtp_users")
 public class User {
-    private int userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
     private String username;
     private String password;
     private String name;
@@ -23,11 +30,12 @@ public class User {
     }
 
     // Getters and Setters
-    public int getUserId() {
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

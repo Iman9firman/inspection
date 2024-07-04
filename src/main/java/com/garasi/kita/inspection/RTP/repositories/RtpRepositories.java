@@ -158,7 +158,7 @@ public class RtpRepositories {
                 stock.setProduct(new Product(rs.getInt("id"), rs.getString("namaBarang")));
                 stock.setGood(rs.getInt("good"));
                 stock.setBad(rs.getInt("bad"));
-                stock.setKacab(new Kacab(rs.getInt("idCabang"), rs.getString("namaCabang")));
+                stock.setKacab(new Kacab(rs.getLong("idCabang"), rs.getString("namaCabang")));
                 return stock;
             }
         });
@@ -361,4 +361,11 @@ public class RtpRepositories {
                 "WHERE DATE(`createDate`) BETWEEN '" + start + "' AND '" + end + "';";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PenjualanDetail.class));
     }
+
+    public List<Cabang> listCabang() {
+        String sql = "SELECT * FROM `rtp_kacab` LIMIT 50;";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Cabang.class));
+
+    }
+
 }

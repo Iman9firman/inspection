@@ -1,50 +1,45 @@
 package com.garasi.kita.inspection.RTP.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-@Entity
-@Table(name = "rtp_kacab")
-public class Kacab {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long branch_id;
+public class Cabang {
+    private int branch_id;
     private String branch_name;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String tipe;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String address;
 
-    // Constructor Default
-    public Kacab() {
+    public Cabang() {
     }
 
-    public Kacab(Long branch_id, String branch_name, String tipe, String address) {
+
+    public Cabang(int branch_id, String branch_name, String tipe, String address) {
         this.branch_id = branch_id;
         this.branch_name = branch_name;
         this.tipe = tipe;
         this.address = address;
     }
 
-    public Kacab(String branch_name) {
+    public Cabang(String branch_name) {
         this.branch_name = branch_name;
 
     }
 
-    public Kacab(Long branch_id, String branch_name) {
+    public Cabang(int branch_id, String branch_name) {
         this.branch_id = branch_id;
         this.branch_name = branch_name;
 
     }
 
     // Getters and Setters
-    public Long getBranch_id() {
+    public int getBranch_id() {
         return branch_id;
     }
 
-    public void setBranch_id(Long branch_id) {
+    public void setBranch_id(int branch_id) {
         this.branch_id = branch_id;
     }
 
@@ -72,6 +67,12 @@ public class Kacab {
         this.address = address;
     }
 
+    public static Cabang fromResultSet(ResultSet rs) throws SQLException {
+        int branch_id = rs.getInt("branch_id");
+        String branch_name = rs.getString("branch_name");
+        String tipe = rs.getString("tipe");
+        String address = rs.getString("address");
+        return new Cabang(branch_id, branch_name, tipe, address);
+    }
+
 }
-
-
