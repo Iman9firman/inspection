@@ -76,7 +76,9 @@ public class RepoDaoImpl implements RepoDao {
     @Override
     public List<Message> getMessageDR() {
         List<Message> messages = new ArrayList<>();
-        String query = "SELECT * FROM `message` WHERE `status` = 'queued' AND `uuid` IS NOT NULL LIMIT 50;";
+        //String query = "SELECT * FROM `message` WHERE `status` = 'queued' AND `uuid` IS NOT NULL LIMIT 50;";
+        String query = "SELECT * FROM `message` WHERE create_at >= NOW() - INTERVAL 1 DAY AND status != 'read' AND `uuid` IS NOT NULL LIMIT 50;";
+
         try {
             messages = jdbcTemplate.query(query, new Object[]{}, BeanPropertyRowMapper.newInstance(Message.class));
             return messages;
