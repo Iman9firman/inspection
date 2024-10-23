@@ -482,7 +482,7 @@ public class InspectionController {
 
             try {
                 Thread.sleep(5000);
-                String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
+                String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_CA_WA_KjO/messages";
                 String urlFile = "http://cms-garasikitaindonesia.com/" + message.getKode_booking() + ".pdf";
                 restService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]), message1.getId());
 
@@ -520,7 +520,7 @@ public class InspectionController {
             greeting = "Siang";
         } else if (currentTime.isAfter(LocalTime.of(14, 59)) && currentTime.isBefore(LocalTime.of(19, 0))) {
             greeting = "Petang";
-        } else if (currentTime.isAfter(LocalTime.of(19, 01)) && currentTime.isBefore(LocalTime.of(24, 0))) {
+        } else if (currentTime.isAfter(LocalTime.of(19, 01)) && currentTime.isBefore(LocalTime.of(23, 59))) {
             greeting = "Petang";
         } else {
             greeting = "Pagi";
@@ -565,7 +565,7 @@ public class InspectionController {
 
         JSONObject template = new JSONObject();
         template.put("language", "id");
-        template.put("name", "report_review");
+        template.put("name", "report_23oct2024");
         template.put("components", components);
 
 
@@ -649,7 +649,7 @@ public class InspectionController {
                 try {
                     // Menahan eksekusi selama 5 detik (5000 milidetik)
                     Thread.sleep(5000);
-                    String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages";
+                    String url = "https://chatapps.8x8.com/api/v1/subaccounts/GKI_CA_WA_KjO/messages";
                     String urlFile = "http://cms-garasikitaindonesia.com/" + name;
                     restService.postData(url, contentWA(message.getKode_booking(), message.getParticipant(), urlFile, greetBasedOnTime(currentTime), message.getContent().split(";")[0], message.getContent().split(";")[1], message.getContent().split(";")[2]), message1.getId());
                 } catch (InterruptedException e) {

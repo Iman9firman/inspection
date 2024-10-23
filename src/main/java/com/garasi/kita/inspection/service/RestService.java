@@ -102,6 +102,7 @@ public class RestService {
                 uuid = resultMessages.getUmid();
 
             } catch (JsonProcessingException e) {
+                LoggerFactory.getLogger(RestService.class).info("JsonProcessingException >>" + e.getMessage());
                 throw new RuntimeException(e);
             }
         } else {
@@ -139,7 +140,7 @@ public class RestService {
             try {
                 ResultDR resultMessages = mapper.readValue(responseBody, ResultDR.class);
                 status = resultMessages.getData().get(0).getStatus().getState();
-                if (resultMessages.getData().get(0).getStatus().getErrorMessage() != null){
+                if (resultMessages.getData().get(0).getStatus().getErrorMessage() != null) {
                     status += " - " + resultMessages.getData().get(0).getStatus().getErrorMessage();
                 }
 

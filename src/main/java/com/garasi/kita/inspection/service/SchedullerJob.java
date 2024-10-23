@@ -67,7 +67,7 @@ public class SchedullerJob {
         try {
             List<Message> dataMessage = dao.getMessageDR();
             for (Message dm : dataMessage) {
-                restService.getDR("https://chatapps.8x8.com/api/v1/subaccounts/GKI_WhatsApp/messages/" + dm.getUuid(), dm.getUuid());
+                restService.getDR("https://chatapps.8x8.com/api/v1/subaccounts/GKI_CA_WA_KjO/messages/" + dm.getUuid(), dm.getUuid());
             }
 
         } catch (Exception e) {
